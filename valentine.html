@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Be My Valentine</title>
+  <style>
+    :root {
+      --primary: #e91e63;       /* Vibrant pink */
+      --secondary: #f8bbd0;     /* Soft pink */
+      --accent: #ff4081;        /* Bright pink */
+      --bg-start: #ff9a9e;      /* Warm pastel gradient */
+      --bg-end: #fad0c4;
+      --card-bg: #fff;
+      --text-color: #d81b60;    /* Deep red/pink */
+      --button-bg: #e91e63;
+      --button-color: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      overflow: hidden;
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+    }
+    /* Hide audio element controls */
+    audio {
+      display: none;
+    }
+    /* Bubble container for floating romantic emojis */
+    .bubble-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .bubble {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    @keyframes float {
+      0%   { transform: translateY(0) scale(1); opacity: 0.8; }
+      50%  { transform: translateY(-20px) scale(1.2); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 0.8; }
+    }
+    .card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      padding: 3rem;
+      text-align: center;
+      z-index: 2;
+      width: 90%;
+      max-width: 600px;
+    }
+    /* Fixed personal message (set by you) */
+    .message-placeholder {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #555;
+      border: 1px solid var(--accent);
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    h1 {
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+    .valentine-question {
+      margin: 1.5rem 0;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      position: relative;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: var(--accent);
+      transform: scale(1.1);
+    }
+    #no-button {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .hidden {
+      display: none;
+    }
+    /* The easier message appears above the Yes button */
+    .easier-message {
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    @media (max-width: 600px) {
+      .card { padding: 2rem; }
+      h1 { font-size: 2rem; }
+      .valentine-question { font-size: 1.5rem; }
+      button { font-size: 1.3rem; padding: 0.8rem 1.5rem; }
+      .message-placeholder { font-size: 1.3rem; padding: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background music (change the src as needed) -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music/valentine_music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <!-- Floating romantic emoji bubbles -->
+  <div class="bubble-container" id="bubble-container"></div>
+  <div class="card">
+    <!-- Fixed personal message (set by you) -->
+    <div class="message-placeholder">
+      Happy Valentine's Day! I cherish every moment with you. (Your personal message goes here)
+    </div>
+    <h1>Be My Valentine?</h1>
+    <div class="valentine-question">
+      Would you like to be my valentine?
+    </div>
+    <!-- Easier message that will appear above the Yes button when needed -->
+    <div id="easier-message" class="easier-message hidden">Guess I will make it easier for you:</div>
+    <div class="button-group">
+      <button id="yes-button">Yes ❤️</button>
+      <button id="no-button">No 😠</button>
+    </div>
+  </div>
+
+  <script>
+    // Generate floating bubble emojis
+    const bubbleContainer = document.getElementById('bubble-container');
+    const bubbleEmojis = ['❤️', '💖', '😍', '😘', '💘', '💕', '💓', '💗', '💞', '❣️'];
+    const bubbleCount = 30;
+    for (let i = 0; i < bubbleCount; i++) {
+      const bubble = document.createElement('span');
+      bubble.classList.add('bubble');
+      bubble.textContent = bubbleEmojis[Math.floor(Math.random() * bubbleEmojis.length)];
+      bubble.style.top = Math.random() * 100 + '%';
+      bubble.style.left = Math.random() * 100 + '%';
+      bubble.style.animationDuration = (4 + Math.random() * 4) + 's';
+      bubble.style.animationDelay = Math.random() * 5 + 's';
+      bubbleContainer.appendChild(bubble);
+    }
+
+    // "No" button behavior with varied messages (all ending with an unhappy emoji)
+    const noButton = document.getElementById('no-button');
+    const yesButton = document.getElementById('yes-button');
+    const easierMessage = document.getElementById('easier-message');
+
+    const noMessages = [
+      "Are you sure? 😞",
+      "100% no? 😔",
+      "Really not? ☹️",
+      "Come on, think again! 😟",
+      "Don't be shy! 😢",
+      "Maybe next time... 😢",
+      "No way! 😒",
+      "Not even a little? 😞",
+      "Seriously? 😔",
+      "I thought so... ☹️"
+    ];
+
+    let noClicks = 0;
+    noButton.addEventListener('click', function() {
+      noClicks++;
+      if(noClicks >= 5) {
+        easierMessage.classList.remove('hidden');
+        noButton.classList.add('hidden');
+        yesButton.style.margin = "0 auto";
+      } else {
+        let newText;
+        do {
+          newText = noMessages[Math.floor(Math.random() * noMessages.length)];
+        } while(newText === noButton.textContent);
+        noButton.textContent = newText;
+        // Randomly reposition the No button within the card
+        const card = document.querySelector('.card');
+        const cardRect = card.getBoundingClientRect();
+        const maxX = cardRect.width - noButton.offsetWidth;
+        const maxY = cardRect.height - noButton.offsetHeight;
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+        noButton.style.position = "absolute";
+        noButton.style.left = randomX + "px";
+        noButton.style.top = randomY + "px";
+      }
+    });
+
+    // When the Yes button is clicked, redirect to the Information page.
+    yesButton.addEventListener('click', function() {
+      window.location.href = "information.html";
+    });
+  </script>
+</body>
+</html>

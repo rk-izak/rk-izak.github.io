@@ -1,9 +1,246 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Top Secret Access</title>
+  <style>
+    :root {
+      --primary-color: #0f0;       /* Neon green */
+      --secondary-color: #0ff;     /* Neon cyan */
+      --bg-dark: #121212;
+      --bg-darker: #1a1a1a;
+      --container-bg: rgba(20, 20, 20, 0.95);
+    }
+    /* Reset & global styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+    /* Container for floating random numbers */
+    #number-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .number {
+      position: absolute;
+      font-size: 1.5rem;
+      color: rgba(0,255,255,0.3);
+      animation: floatNumber 8s ease-in-out infinite;
+    }
+    @keyframes floatNumber {
+      0%   { transform: translateY(0) scale(1); opacity: 0.5; }
+      50%  { transform: translateY(-20px) scale(1.2); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 0.5; }
+    }
+    /* Hide audio element controls */
+    audio {
+      display: none;
+    }
+    .container {
+      background: var(--container-bg);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    /* Always-visible attempt counter */
+    #attempt-counter {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.5);
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--secondary-color);
+      text-shadow: 0 0 5px var(--secondary-color);
+    }
+    .initial-hint {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--primary-color);
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1.2rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--primary-color);
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type="password"]:focus {
+      border-color: var(--secondary-color);
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--primary-color);
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: var(--secondary-color);
+      transform: scale(1.05);
+    }
+    .hints-container {
+      margin-top: 1rem;
+      text-align: left;
+      font-size: 0.95rem;
+      color: var(--secondary-color);
+    }
+    .hint {
+      margin: 0.5rem 0;
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    /* Shake animation for error feedback */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
+    }
+    .error {
+      animation: shake 0.4s;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1.5rem; }
+      h1 { font-size: 2rem; }
+      input[type="password"] { font-size: 1rem; }
+      button { font-size: 1rem; }
+    }
+  </style>
+</head>
 <body>
-  <h1>Papiez</h1>
-  <p>Gitara siema :D</p>
-  <img src="https://wadowicegorne.pl/fcp/2N1Q6Gxs5VFo2NllXFHR8R0EKJxMpGSMnRHY2MwFbS20gFyQOVmkTSS5LHBFfPRcKEwoqHS8nPioJInp8GUUSKjE/_users/code_BJRgsBgY-UE07AhUHBjkpDwwNLxcpISUxCCl2NgE/stale/jp2.jpg" />
-</body>
+  <!-- Background music (change the src as needed) -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music/index_music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <!-- Container for floating random numbers -->
+  <div id="number-container"></div>
+  <div class="container">
+    <div id="attempt-counter">Attempts: 0</div>
+    <h1>Top Secret Access</h1>
+    <div class="initial-hint" id="initial-hint">
+      Hint: Enter the secret code.
+    </div>
+    <input type="password" id="password" placeholder="Password" autofocus>
+    <button onclick="checkPassword()">Submit</button>
+    <div class="hints-container" id="hints-container"></div>
+  </div>
 
+  <script>
+    // Set your secret password here
+    const correctPassword = "mysecretpassword"; // Change as desired
+
+    // Hints to display after failed attempts.
+    const hints = [
+      "Hint 1: The password is a combination of letters and numbers.",
+      "Hint 2: It might be related to your favorite pet's name.",
+      "Final Hint: The password is 'mysecretpassword'."
+    ];
+
+    let attempts = 0;
+    let displayedHints = 0;
+
+    function updateAttemptCounter() {
+      document.getElementById("attempt-counter").textContent = `Attempts: ${attempts}`;
+    }
+
+    function checkPassword() {
+      const passwordField = document.getElementById("password");
+      const userInput = passwordField.value;
+      if(userInput === correctPassword) {
+        window.location.href = "valentine.html";
+      } else {
+        attempts++;
+        updateAttemptCounter();
+        passwordField.value = "";
+        if((attempts === 3 || attempts === 6 || attempts === 9) && displayedHints < hints.length) {
+          showHint(hints[displayedHints]);
+          displayedHints++;
+        }
+        animateError();
+        alert("Incorrect password. Try again.");
+      }
+    }
+
+    function showHint(message) {
+      const hintsContainer = document.getElementById("hints-container");
+      const hintDiv = document.createElement("div");
+      hintDiv.classList.add("hint");
+      hintDiv.textContent = message;
+      hintsContainer.appendChild(hintDiv);
+    }
+
+    function animateError() {
+      const container = document.querySelector(".container");
+      container.classList.add("error");
+      setTimeout(() => {
+        container.classList.remove("error");
+      }, 400);
+    }
+
+    // Allow submission by pressing "Enter"
+    document.getElementById("password").addEventListener("keyup", function(event) {
+      if(event.key === "Enter") {
+        checkPassword();
+      }
+    });
+
+    // Generate random floating numbers in the background
+    const numberContainer = document.getElementById("number-container");
+    const numberCount = 10;
+    for (let i = 0; i < numberCount; i++) {
+      const numberElem = document.createElement("div");
+      numberElem.classList.add("number");
+      // Random number between 0 and 9999
+      numberElem.textContent = Math.floor(Math.random() * 10000);
+      numberElem.style.top = Math.random() * 100 + '%';
+      numberElem.style.left = Math.random() * 100 + '%';
+      numberElem.style.animationDuration = (6 + Math.random() * 4) + 's';
+      numberElem.style.animationDelay = Math.random() * 5 + 's';
+      numberContainer.appendChild(numberElem);
+    }
+  </script>
+</body>
 </html>

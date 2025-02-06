@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      /* Classic parchment background with subtle texture */
+      background: #F5ECD9;
+      background-image: 
+        linear-gradient(135deg, rgba(245,236,217,0.2) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(245,236,217,0.2) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(245,236,217,0.2) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(245,236,217,0.2) 25%, #F5ECD9 25%);
+      background-size: 40px 40px;
+      background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+      padding: 20px;
+      color: #333;
+    }
+    .menu-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #333;
+      padding-bottom: 0.5rem;
+    }
+    .course {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed #ccc;
+    }
+    .course h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+      color: #555;
+    }
+    .course p {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    /* New Notice Block */
+    .notice {
+      text-align: center;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .notice p {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .notice a {
+      color: #27ae60;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .notice button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #27ae60;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .notice button:hover {
+      background: #219150;
+    }
+    .buttons {
+      text-align: center;
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .buttons button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #27ae60;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .buttons button:hover {
+      background: #219150;
+    }
+    .restart-btn {
+      background: #e74c3c;
+    }
+    .restart-btn:hover {
+      background: #cf3f33;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-container">
+    <h1>Your Menu</h1>
+    
+    <!-- New Notice Section Above the Buttons -->
+    <div class="notice">
+      <p>Please send your personalised menu to our main chef at: <a href="mailto:izakradoslaw@gmail.com">izakradoslaw@gmail.com</a> before 12th of February.</p>
+      <button id="proceed">Proceed</button>
+    </div>
+    
+    <div id="menu-list">
+      <!-- Course selections will be inserted here -->
+    </div>
+    <div class="buttons">
+      <button id="download-menu">Download Menu</button>
+      <button id="print-menu">Print Menu</button>
+      <button class="restart-btn" id="start-again">Start Again</button>
+    </div>
+  </div>
+  
+  <script>
+    // Define courses and titles
+    const courses = ['course1', 'course2', 'course3', 'course4', 'course5'];
+    const courseTitles = {
+      'course1': 'Course 1: Amuse-Bouche',
+      'course2': 'Course 2: Starter/Appetizer',
+      'course3': 'Course 3: Main Course',
+      'course4': 'Course 4: Palate Cleanser / Pre-Dessert',
+      'course5': 'Course 5: Dessert'
+    };
+    
+    // Compile the menu HTML from localStorage
+    const menuList = document.getElementById('menu-list');
+    let menuHTML = "";
+    
+    courses.forEach(course => {
+      const data = localStorage.getItem(course);
+      if (data) {
+        const courseData = JSON.parse(data);
+        menuHTML += `<div class="course">
+          <h2>${courseTitles[course]}</h2>
+          <p><strong>${courseData.title}</strong></p>
+          <p>${courseData.description}</p>
+        </div>`;
+      }
+    });
+    
+    menuList.innerHTML = menuHTML;
+    
+    // Download Menu Button: create an HTML file and trigger download
+    document.getElementById('download-menu').addEventListener('click', function() {
+      let menuContent = "<html><head><meta charset='UTF-8'><title>Your Menu</title></head><body>";
+      courses.forEach(course => {
+        const data = localStorage.getItem(course);
+        if (data) {
+          const courseData = JSON.parse(data);
+          menuContent += `<h2>${courseTitles[course]}</h2>`;
+          menuContent += `<p><strong>${courseData.title}</strong></p>`;
+          menuContent += `<p>${courseData.description}</p><br>`;
+        }
+      });
+      menuContent += "</body></html>";
+      
+      const blob = new Blob([menuContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'menu.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+    
+    // Print Menu Button: call the browser print dialog
+    document.getElementById('print-menu').addEventListener('click', function() {
+      window.print();
+    });
+    
+    // Start Again Button: clear localStorage and restart at Course 1
+    document.getElementById('start-again').addEventListener('click', function() {
+      localStorage.clear();
+      window.location.href = "course1.html";
+    });
+    
+    // Proceed Button: go directly to final.html
+    document.getElementById('proceed').addEventListener('click', function() {
+      window.location.href = "final.html";
+    });
+  </script>
+</body>
+</html>

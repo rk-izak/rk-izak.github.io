@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course 5: Dessert</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Lato', sans-serif;
+      /* A rich burgundy gradient background for dessert */
+      background: linear-gradient(135deg, #FDEDEC, #F8EFEE);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .container {
+      background: #FDF6F0;
+      border-radius: 10px;
+      padding: 2rem 3rem;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      color: #8e44ad; /* Rich Burgundy Accent */
+    }
+    p.description {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .option-button {
+      border: 2px solid #8e44ad;
+      border-radius: 5px;
+      padding: 1rem;
+      background: #F5EEF8;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-align: left;
+    }
+    .option-button:hover {
+      background: #EBDEF0;
+    }
+    .option-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #8e44ad;
+    }
+    .option-desc {
+      font-size: 1rem;
+      color: #777;
+    }
+    /* Floating Food Emojis */
+    .emoji-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      animation: float 8s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+    /* Confirmation Modal */
+    #confirmation-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .modal-content p {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .modal-buttons button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .confirm-btn { background: #27ae60; color: #fff; }
+    .cancel-btn { background: #e74c3c; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="emoji-container" id="emoji-container"></div>
+  <div class="container">
+    <h1>Course 5: Dessert</h1>
+    <p class="description">A sweet finish that combines classic techniques with unique twists from Middle Eastern and Asian inspirations.</p>
+    <div class="options">
+      <button class="option-button" data-title="Baklava Cheesecake" data-desc="A decadent fusion dessert with creamy cheesecake atop a base of flaky, nut-studded baklava.">
+        <div class="option-title">Baklava Cheesecake</div>
+        <div class="option-desc">A decadent fusion dessert with creamy cheesecake atop a base of flaky, nut-studded baklava.</div>
+      </button>
+      <button class="option-button" data-title="Matcha Tiramisu" data-desc="A Japanese twist on the classic Italian dessert, featuring matcha-soaked ladyfingers layered with mascarpone cream.">
+        <div class="option-title">Matcha Tiramisu</div>
+        <div class="option-desc">A Japanese twist on the classic Italian dessert, featuring matcha-soaked ladyfingers layered with mascarpone cream.</div>
+      </button>
+      <button class="option-button" data-title="Pistachio Rosewater Ice Cream" data-desc="Homemade ice cream with finely crushed pistachios and a subtle hint of rosewater.">
+        <div class="option-title">Pistachio Rosewater Ice Cream</div>
+        <div class="option-desc">Homemade ice cream with finely crushed pistachios and a subtle hint of rosewater.</div>
+      </button>
+      <button class="option-button" data-title="Mango Sticky Rice Panna Cotta" data-desc="A silky panna cotta infused with coconut milk, served with mango coulis and toasted sesame seeds.">
+        <div class="option-title">Mango Sticky Rice Panna Cotta</div>
+        <div class="option-desc">A silky panna cotta infused with coconut milk, served with mango coulis and toasted sesame seeds.</div>
+      </button>
+      <button class="option-button" data-title="Dark Chocolate Mousse with a Hint of Chili" data-desc="A luxuriously smooth chocolate mousse with a delicate kick of chili, garnished with fresh berries.">
+        <div class="option-title">Dark Chocolate Mousse with a Hint of Chili</div>
+        <div class="option-desc">A luxuriously smooth chocolate mousse with a delicate kick of chili, garnished with fresh berries.</div>
+      </button>
+      <button class="option-button" data-title="Saffron Cardamom Rice Pudding" data-desc="A creamy rice pudding infused with saffron and cardamom, topped with toasted almonds and a drizzle of honey.">
+        <div class="option-title">Saffron Cardamom Rice Pudding</div>
+        <div class="option-desc">A creamy rice pudding infused with saffron and cardamom, topped with toasted almonds and a drizzle of honey.</div>
+      </button>
+      <button class="option-button" id="custom-option">Other (Custom)</button>
+    </div>
+  </div>
+  
+  <div id="confirmation-modal">
+    <div class="modal-content">
+      <p id="modal-text">Are you sure you want to choose "<span id="selected-title"></span>"?</p>
+      <div class="modal-buttons">
+        <button class="confirm-btn" id="confirm-yes">Yes</button>
+        <button class="cancel-btn" id="confirm-no">No</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const emojiContainer = document.getElementById('emoji-container');
+    const foodEmojis = ["🍰", "🍮", "🍫", "🍨"];
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+      emoji.style.top = Math.random() * 100 + '%';
+      emoji.style.left = Math.random() * 100 + '%';
+      emoji.style.animationDuration = (4 + Math.random() * 4) + 's';
+      emojiContainer.appendChild(emoji);
+      setTimeout(() => { emoji.remove(); }, 8000);
+    }
+    setInterval(createEmoji, 500);
+    
+    let selectedTitle = "";
+    let selectedDesc = "";
+    
+    const optionButtons = document.querySelectorAll('.option-button');
+    const modal = document.getElementById('confirmation-modal');
+    const selectedTitleSpan = document.getElementById('selected-title');
+    const confirmYes = document.getElementById('confirm-yes');
+    const confirmNo = document.getElementById('confirm-no');
+    
+    optionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        if(this.id === "custom-option") {
+          const customTitle = prompt("Enter your custom option title:");
+          if(customTitle && customTitle.trim() !== ""){
+            const customDesc = prompt("Enter your custom option description:");
+            if(customDesc && customDesc.trim() !== ""){
+              selectedTitle = customTitle.trim();
+              selectedDesc = customDesc.trim();
+              selectedTitleSpan.textContent = selectedTitle;
+              modal.style.display = "flex";
+            }
+          }
+        } else {
+          selectedTitle = this.getAttribute('data-title');
+          selectedDesc = this.getAttribute('data-desc');
+          selectedTitleSpan.textContent = selectedTitle;
+          modal.style.display = "flex";
+        }
+      });
+    });
+    
+    confirmYes.addEventListener('click', function() {
+      const courseData = { title: selectedTitle, description: selectedDesc };
+      localStorage.setItem('course5', JSON.stringify(courseData));
+      window.location.href = "results.html";
+    });
+    
+    confirmNo.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+  </script>
+</body>
+</html>
