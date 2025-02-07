@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Ticket</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #000, #1a1a1a);
+      font-family: 'Lato', sans-serif;
+      color: #D4AF37;
+    }
+    .ticket-container {
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #D4AF37;
+      border-radius: 10px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(212,175,55,0.7);
+      animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .ticket-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #D4AF37;
+      padding-bottom: 0.5rem;
+      color: #D4AF37;
+    }
+    .ticket-photo {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 3px solid #D4AF37;
+      border-radius: 10px;
+      margin: 0 auto;
+    }
+    .contact-details {
+      margin: 1rem 0;
+      text-align: left;
+      font-size: 1.2rem;
+    }
+    .contact-details p {
+      margin: 0.5rem 0;
+    }
+    /* Holographic Seal (Animated) */
+    .holo-seal {
+      margin: 2rem auto 0;
+      width: 120px;
+      height: 120px;
+      border: 3px solid #D4AF37;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      animation: rotateSeal 5s linear infinite;
+    }
+    @keyframes rotateSeal {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .holo-seal::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(212,175,55,0.3), transparent 70%);
+      animation: pulseSeal 3s ease-in-out infinite;
+    }
+    @keyframes pulseSeal {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+    /* Seal Logo (Added) */
+    .seal-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1; /* Ensures the logo appears above the animated seal */
+      pointer-events: none;
+    }
+    .seal-logo svg {
+      width: 70px;
+      height: 70px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket-container">
+    <div class="ticket-header">Exclusive Dinner Ticket</div>
+    <img src="invite_photo.JPEG" alt="Guest Photo" class="ticket-photo">
+    <div class="contact-details">
+      <p><strong>Full Name:</strong> Anna Maria Samoraj</p>
+      <p><strong>Dress Code:</strong> Formal/Semi-Formal (recomennded)</p>
+      <p><strong>Date:</strong> 14.02.2025</p>
+      <p><strong>Start Time:</strong> 17:00/5pm</p>
+      <p><strong>Dinner Address:</strong> Sokratesa 13C, 01-909 Warsaw, Poland</p>
+    </div>
+    <!-- Holographic Seal with Custom RKI Logo -->
+    <div class="holo-seal">
+      <div class="seal-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <!-- Outer circle (decorative element) -->
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#D4AF37" stroke-width="5"/>
+          <!-- Monogram initials -->
+          <text x="50%" y="55%" text-anchor="middle" fill="#D4AF37" font-size="30" font-family="'Playfair Display', serif" dy=".3em">RKI</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

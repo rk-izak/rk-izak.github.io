@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love You</title>
+  <!-- Using Poppins for a modern, vibrant feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset and base styles */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a053e, #e01b84, #1b3e96, #173359);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
+      position: relative;
+    }
+    @keyframes gradientAnimation {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Background effects overlay */
+    .background-effects {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(106,5,62,0.2), transparent 50%), 
+                  radial-gradient(circle at 80% 70%, rgba(224,27,132,0.2), transparent 50%), 
+                  radial-gradient(circle at 50% 50%, rgba(27,62,150,0.2), transparent 50%), 
+                  radial-gradient(circle at 70% 20%, rgba(23,51,89,0.2), transparent 50%);
+      animation: backgroundPulse 8s ease-in-out infinite;
+    }
+    @keyframes backgroundPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    /* Sparkles effect */
+    .sparkles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .sparkle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkleAnim 3s ease-in-out infinite;
+    }
+    @keyframes sparkleAnim {
+      0%, 100% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    /* Container for floating images */
+    .floating-images {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 2;
+    }
+    /* Floating images styling */
+    .floating-images img {
+      position: absolute;
+      width: 250px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      /* Removed transition since movement is now handled in the animation loop */
+    }
+    /* Center text styling */
+    .center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      max-width: 90%;
+      animation: pulseScale 3s ease-in-out infinite;
+    }
+    @keyframes pulseScale {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.05); }
+    }
+    .center-text h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 600;
+      animation: pulseText 2s ease-in-out infinite;
+    }
+    @keyframes pulseText {
+      0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+      50% { text-shadow: 0 0 20px #fff, 0 0 30px #fff; }
+      100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+    }
+    .center-text p {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+    }
+    /* Glowing border around center text */
+    .center-text::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, #6a053e, #e01b84, #1b3e96, #173359);
+      z-index: -1;
+      filter: blur(5px);
+      opacity: 0.7;
+      animation: borderPulse 4s linear infinite;
+      border-radius: 10px;
+    }
+    @keyframes borderPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    /* Initial overlay with blur effect */
+    .initial-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(15px);
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 4;
+      color: #fff;
+    }
+    .initial-overlay button {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background: #D4AF37;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .initial-overlay button:hover {
+      transform: scale(1.1);
+      background: #b4942a;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background effects overlay -->
+  <div class="background-effects"></div>
+  
+  <!-- Sparkles container -->
+  <div class="sparkles" id="sparkles"></div>
+  
+  <!-- Floating images container -->
+  <div class="floating-images" id="floatingImages"></div>
+  
+  <!-- Center text -->
+  <div class="center-text">
+    <h1>Thank you for making every day special.</h1>
+    <h2>Can't wait to see you there!</h2>
+    <p>Xoxo, Radek (Chef de Cuisine)</p>
+  </div>
+  
+  <!-- Initial overlay -->
+  <div class="initial-overlay" id="initialOverlay">
+    <button id="startFinal">Just one final thing...</button>
+  </div>
+  
+  <!-- Placeholder looping music -->
+  <audio id="finalMusic" src="music/TV Girl - For You.mp3" loop></audio>
+  
+  <script>
+    // Utility function: returns a random integer between min and max (inclusive)
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // List of images to use
+    const imageFiles = [
+      "images_bg/1E8F7006-8620-4917-A5F8-E82576503FD0.JPG",
+      "images_bg/77A48A6C-661D-44EE-A08A-D49D24C43F66.JPG",
+      "images_bg/IMG_3741.JPG",
+      "images_bg/22F935E7-94DF-49F0-9409-A0B50EC9162A.JPG",
+      "images_bg/8DDCBC43-923D-47A3-A798-F9F8762B7C0E.JPG",
+      "images_bg/IMG_3746.JPG",
+      "images_bg/4FCE616F-F916-441A-8AF5-C38849B71110.JPG",
+      "images_bg/8E10281E-710E-4D99-8176-B47F4400D0DA.JPG",
+      "images_bg/IMG_6330.JPG",
+      "images_bg/5B74875C-0C65-4F8B-8965-D3FB44B7D19D.JPG",
+      "images_bg/CEF76AD4-8E13-465A-820F-E77C39C09FD8.JPG",
+      "images_bg/nvm.JPG",
+      "images_bg/61B485B4-F6B1-444B-8523-4540148671FD.JPG",
+      "images_bg/DSC02125.JPEG",
+      "images_bg/71F64EC6-E09F-4DCA-A39A-8B617F14D48B.JPG",
+      "images_bg/IMG_3739.JPG"
+    ];
+    
+    const floatingImagesContainer = document.getElementById('floatingImages');
+    // Array to hold our floating image objects with properties for continuous motion
+    const floatingImages = [];
+    
+    imageFiles.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      // Temporarily position at (0,0) until the image loads
+      img.style.left = "0px";
+      img.style.top = "0px";
+      floatingImagesContainer.appendChild(img);
+      
+      // Once the image loads, set its initial position and assign it a random velocity
+      img.onload = function() {
+        const width = img.offsetWidth;
+        const height = img.offsetHeight;
+        const maxLeft = window.innerWidth - width;
+        const maxTop = window.innerHeight - height;
+        const x = getRandomInt(0, maxLeft);
+        const y = getRandomInt(0, maxTop);
+        img.style.left = x + "px";
+        img.style.top = y + "px";
+        // Random velocity: choose a random angle and a speed between 20-60 pixels per second.
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = getRandomInt(20, 60) / 1000; // pixels per millisecond
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+        floatingImages.push({ element: img, x, y, dx, dy, width, height });
+      };
+    });
+    
+    // Animation loop to update the positions of the floating images
+    let lastTimestamp = performance.now();
+    function animate() {
+      const now = performance.now();
+      const deltaTime = now - lastTimestamp;
+      lastTimestamp = now;
+      
+      floatingImages.forEach(obj => {
+        // Update positions based on velocity and time elapsed
+        obj.x += obj.dx * deltaTime;
+        obj.y += obj.dy * deltaTime;
+        
+        // Bounce horizontally if hitting left/right boundaries
+        if (obj.x < 0) {
+          obj.x = 0;
+          obj.dx = -obj.dx;
+        } else if (obj.x > window.innerWidth - obj.width) {
+          obj.x = window.innerWidth - obj.width;
+          obj.dx = -obj.dx;
+        }
+        // Bounce vertically if hitting top/bottom boundaries
+        if (obj.y < 0) {
+          obj.y = 0;
+          obj.dy = -obj.dy;
+        } else if (obj.y > window.innerHeight - obj.height) {
+          obj.y = window.innerHeight - obj.height;
+          obj.dy = -obj.dy;
+        }
+        
+        // Apply the new position
+        obj.element.style.left = obj.x + "px";
+        obj.element.style.top = obj.y + "px";
+      });
+      
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+    
+    // Generate sparkles for extra background excitement
+    const sparklesContainer = document.getElementById('sparkles');
+    const numSparkles = 30;
+    for (let i = 0; i < numSparkles; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      const size = getRandomInt(10, 30);
+      sparkle.style.width = size + "px";
+      sparkle.style.height = size + "px";
+      sparkle.style.top = getRandomInt(0, 100) + "%";
+      sparkle.style.left = getRandomInt(0, 100) + "%";
+      sparkle.style.animationDuration = getRandomInt(2, 4) + "s";
+      sparkle.style.animationDelay = getRandomInt(0, 5) + "s";
+      sparklesContainer.appendChild(sparkle);
+    }
+    
+    // Initial overlay button logic: hide overlay and start music
+    const startFinalButton = document.getElementById('startFinal');
+    const initialOverlay = document.getElementById('initialOverlay');
+    const finalMusic = document.getElementById('finalMusic');
+    
+    startFinalButton.addEventListener('click', function() {
+      initialOverlay.style.display = 'none';
+      finalMusic.currentTime = 59;
+      finalMusic.play().catch(e => console.log("Music play error:", e));
+    });
+  </script>
+</body>
+</html>

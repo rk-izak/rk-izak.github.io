@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Be My Valentine</title>
+  <title>Valentine's Day Invitation</title>
+  <!-- Add romantic fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #e91e63;       /* Vibrant pink */
@@ -11,7 +13,10 @@
       --accent: #ff4081;        /* Bright pink */
       --bg-start: #ff9a9e;      /* Warm pastel gradient */
       --bg-end: #fad0c4;
-      --card-bg: #fff;
+      /* More vibrant, lively gradient with additional stops */
+      --gradient-stops: linear-gradient(135deg, #ff5f6d, #ff4081, #ff69b4, #ffc371);
+      /* Subtle gradient for the card background */
+      --card-bg: linear-gradient(135deg, #ffffff, #ffeef8);
       --text-color: #d81b60;    /* Deep red/pink */
       --button-bg: #e91e63;
       --button-color: #fff;
@@ -22,8 +27,10 @@
       box-sizing: border-box;
     }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      font-family: 'Playfair Display', serif;
+      background: var(--gradient-stops);
+      background-size: 400% 400%;
+      animation: gradientAnim 4s ease infinite;
       overflow: hidden;
       position: relative;
       min-height: 100vh;
@@ -32,11 +39,18 @@
       justify-content: center;
       color: var(--text-color);
     }
+    @keyframes gradientAnim {
+      0%   { background-position: 0% 50%; }
+      25%  { background-position: 50% 50%; }
+      50%  { background-position: 100% 50%; }
+      75%  { background-position: 50% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     /* Hide audio element controls */
     audio {
       display: none;
     }
-    /* Bubble container for floating romantic emojis */
+    /* Floating romantic emoji bubbles */
     .bubble-container {
       position: absolute;
       top: 0;
@@ -57,6 +71,55 @@
       0%   { transform: translateY(0) scale(1); opacity: 0.8; }
       50%  { transform: translateY(-20px) scale(1.2); opacity: 1; }
       100% { transform: translateY(0) scale(1); opacity: 0.8; }
+    }
+    /* Decorative hearts in the background */
+    .decor-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: var(--primary);
+      transform: rotate(45deg);
+      animation: floatHeart 8s linear infinite;
+      opacity: 0.7;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: var(--primary);
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -15px;
+      left: 0;
+    }
+    .heart::after {
+      left: 15px;
+      top: 0;
+    }
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(45deg);
+        opacity: 0;
+      }
     }
     .card {
       position: relative;
@@ -80,8 +143,9 @@
     }
     h1 {
       margin-bottom: 1.5rem;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       color: var(--primary);
+      font-family: 'Dancing Script', cursive;
     }
     .valentine-question {
       margin: 1.5rem 0;
@@ -123,6 +187,27 @@
       font-weight: bold;
       margin-bottom: 0.5rem;
     }
+    /* Style for the Music Control buttons */
+    .music-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    #play-music-btn, #stop-music-btn {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    #play-music-btn:hover, #stop-music-btn:hover {
+      background-color: var(--accent);
+      transform: scale(1.1);
+    }
     @media (max-width: 600px) {
       .card { padding: 2rem; }
       h1 { font-size: 2rem; }
@@ -133,35 +218,46 @@
   </style>
 </head>
 <body>
-  <!-- Background music (change the src as needed) -->
-  <audio id="bg-music" autoplay loop>
-    <source src="music/valentine_music.mp3" type="audio/mpeg">
+  <!-- Background music starts muted to allow autoplay -->
+  <audio id="bg-music" autoplay loop muted>
+    <source src="music/Leith Ross - We'll Never Have Sex (Lyric Video).mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
+  
+  <!-- Decorative hearts in the background -->
+  <div class="decor-container" id="decor-container"></div>
+  
   <!-- Floating romantic emoji bubbles -->
   <div class="bubble-container" id="bubble-container"></div>
+  
   <div class="card">
     <!-- Fixed personal message (set by you) -->
     <div class="message-placeholder">
-      Happy Valentine's Day! I cherish every moment with you. (Your personal message goes here)
+      Gratulacje! Udało ci się zgadnąć hasło, chociaż może po prostu przeklikałaś...
+      Tak czy siak, skoro już tu trafiłaś, to chciałbym się Ciebie oficjalnie spytać:
     </div>
-    <h1>Be My Valentine?</h1>
+    <h1>Will You Be My Valentine?</h1>
     <div class="valentine-question">
-      Would you like to be my valentine?
+      Better answer carefully:
     </div>
     <!-- Easier message that will appear above the Yes button when needed -->
-    <div id="easier-message" class="easier-message hidden">Guess I will make it easier for you:</div>
+    <div id="easier-message" class="easier-message hidden">Nice Try! Guess I will make it easier for you:</div>
     <div class="button-group">
       <button id="yes-button">Yes ❤️</button>
       <button id="no-button">No 😠</button>
+    </div>
+    <!-- Music control buttons -->
+    <div class="music-buttons">
+      <button id="play-music-btn" type="button">Play Music</button>
+      <button id="stop-music-btn" type="button">Stop Music</button>
     </div>
   </div>
 
   <script>
     // Generate floating bubble emojis
     const bubbleContainer = document.getElementById('bubble-container');
-    const bubbleEmojis = ['❤️', '💖', '😍', '😘', '💘', '💕', '💓', '💗', '💞', '❣️'];
-    const bubbleCount = 30;
+    const bubbleEmojis = ['❤️','💖','😍','😘','💘','💕','💓','💗','💞','❣️','💝','💟','♉','♎'];
+    const bubbleCount = 70;
     for (let i = 0; i < bubbleCount; i++) {
       const bubble = document.createElement('span');
       bubble.classList.add('bubble');
@@ -172,8 +268,21 @@
       bubble.style.animationDelay = Math.random() * 5 + 's';
       bubbleContainer.appendChild(bubble);
     }
-
-    // "No" button behavior with varied messages (all ending with an unhappy emoji)
+    
+    // Generate decorative hearts
+    const decorContainer = document.getElementById('decor-container');
+    const heartCount = 20;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+      heart.style.animationDelay = Math.random() * 4 + 's';
+      decorContainer.appendChild(heart);
+    }
+    
+    // "No" button behavior with more messages and increased movement frequency
     const noButton = document.getElementById('no-button');
     const yesButton = document.getElementById('yes-button');
     const easierMessage = document.getElementById('easier-message');
@@ -188,13 +297,23 @@
       "No way! 😒",
       "Not even a little? 😞",
       "Seriously? 😔",
-      "I thought so... ☹️"
+      "I thought so... ☹️",
+      "Absolutely not! 😡",
+      "I knew it! 😩",
+      "Definitely not! 😤",
+      "You must be kidding! 😲",
+      "Not a chance! 😣",
+      "Over my dead body! 😵",
+      "I don't think so! 🤨",
+      "No can do! 😶",
+      "Out of the question! 😫",
+      "Forget it! 😟"
     ];
 
     let noClicks = 0;
     noButton.addEventListener('click', function() {
       noClicks++;
-      if(noClicks >= 5) {
+      if(noClicks >= 7) {
         easierMessage.classList.remove('hidden');
         noButton.classList.add('hidden');
         yesButton.style.margin = "0 auto";
@@ -204,13 +323,16 @@
           newText = noMessages[Math.floor(Math.random() * noMessages.length)];
         } while(newText === noButton.textContent);
         noButton.textContent = newText;
-        // Randomly reposition the No button within the card
+        // Reposition the No button within the central area of the card
         const card = document.querySelector('.card');
-        const cardRect = card.getBoundingClientRect();
-        const maxX = cardRect.width - noButton.offsetWidth;
-        const maxY = cardRect.height - noButton.offsetHeight;
-        const randomX = Math.random() * maxX;
-        const randomY = Math.random() * maxY;
+        const cardWidth = card.clientWidth;
+        const cardHeight = card.clientHeight;
+        const minX = cardWidth * 0.25;
+        const minY = cardHeight * 0.25;
+        const maxX = cardWidth * 0.75 - noButton.offsetWidth;
+        const maxY = cardHeight * 0.75 - noButton.offsetHeight;
+        const randomX = Math.random() * (maxX - minX) + minX;
+        const randomY = Math.random() * (maxY - minY) + minY;
         noButton.style.position = "absolute";
         noButton.style.left = randomX + "px";
         noButton.style.top = randomY + "px";
@@ -220,6 +342,23 @@
     // When the Yes button is clicked, redirect to the Information page.
     yesButton.addEventListener('click', function() {
       window.location.href = "information.html";
+    });
+
+    // Background music handling
+    const bgMusic = document.getElementById("bg-music");
+    bgMusic.volume = 0.3;
+    
+    // "Play Music" button functionality (allows manual unmuting and playback)
+    document.getElementById("play-music-btn").addEventListener("click", function() {
+      bgMusic.play();
+      bgMusic.muted = false;
+    });
+
+    // "Stop Music" button functionality
+    document.getElementById("stop-music-btn").addEventListener("click", function() {
+      bgMusic.pause();
+      // Optionally reset the audio to the beginning:
+      bgMusic.currentTime = 0;
     });
   </script>
 </body>

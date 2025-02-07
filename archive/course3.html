@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course 3: Main Course</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Lato', sans-serif;
+      /* A soft warm red gradient background */
+      background: linear-gradient(135deg, #FDEDEC, #FADBD8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .container {
+      background: #FDF2F2;
+      border-radius: 10px;
+      padding: 2rem 3rem;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      color: #c0392b; /* Dark Red Accent */
+    }
+    p.description {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .option-button {
+      border: 2px solid #c0392b;
+      border-radius: 5px;
+      padding: 1rem;
+      background: #FDEDEC;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-align: left;
+    }
+    .option-button:hover {
+      background: #FADBD8;
+    }
+    .option-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #c0392b;
+    }
+    .option-desc {
+      font-size: 1rem;
+      color: #777;
+    }
+    /* Floating Food Emojis */
+    .emoji-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      animation: float 8s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+    /* Confirmation Modal */
+    #confirmation-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .modal-content p {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .modal-buttons button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .confirm-btn { background: #27ae60; color: #fff; }
+    .cancel-btn { background: #e74c3c; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="emoji-container" id="emoji-container"></div>
+  <div class="container">
+    <h1>Course 3: Main Course</h1>
+    <p class="description">A robust, flavorful centerpiece with options that celebrate both Middle Eastern and Asian cuisines.</p>
+    <div class="options">
+      <button class="option-button" data-title="Herbed Lamb Kofta with Tzatziki" data-desc="Spiced lamb meatballs infused with Middle Eastern herbs, served alongside a cooling tzatziki, couscous, and grilled vegetables.">
+        <div class="option-title">Herbed Lamb Kofta with Tzatziki</div>
+        <div class="option-desc">Spiced lamb meatballs infused with Middle Eastern herbs, served alongside a cooling tzatziki, couscous, and grilled vegetables.</div>
+      </button>
+      <button class="option-button" data-title="Thai Green Curry with Chicken" data-desc="Tender chicken simmered in a fragrant green curry sauce with eggplant and bamboo shoots, served over jasmine rice.">
+        <div class="option-title">Thai Green Curry with Chicken</div>
+        <div class="option-desc">Tender chicken simmered in a fragrant green curry sauce with eggplant and bamboo shoots, served over jasmine rice.</div>
+      </button>
+      <button class="option-button" data-title="Teriyaki-Glazed Salmon" data-desc="Oven-baked salmon fillets brushed with a sweet-savory teriyaki glaze, partnered with stir-fried bok choy and shiitake mushrooms.">
+        <div class="option-title">Teriyaki-Glazed Salmon</div>
+        <div class="option-desc">Oven-baked salmon fillets brushed with a sweet-savory teriyaki glaze, partnered with stir-fried bok choy and shiitake mushrooms.</div>
+      </button>
+      <button class="option-button" data-title="Persian Saffron Chicken with Barberry Rice" data-desc="Juicy chicken marinated in saffron and warm spices, served over a tangy, barberry-infused rice pilaf.">
+        <div class="option-title">Persian Saffron Chicken with Barberry Rice</div>
+        <div class="option-desc">Juicy chicken marinated in saffron and warm spices, served over a tangy, barberry-infused rice pilaf.</div>
+      </button>
+      <button class="option-button" data-title="Vegetarian Tofu & Cashew Stir-Fry" data-desc="A colorful mix of tofu, crisp vegetables, and roasted cashews tossed in a light soy-ginger sauce, served with steamed brown rice.">
+        <div class="option-title">Vegetarian Tofu & Cashew Stir-Fry</div>
+        <div class="option-desc">A colorful mix of tofu, crisp vegetables, and roasted cashews tossed in a light soy-ginger sauce, served with steamed brown rice.</div>
+      </button>
+      <button class="option-button" data-title="Beef Rendang" data-desc="Slow-cooked Indonesian beef in a rich, coconut-milk-based curry with a blend of spices, served with coconut rice and pickled vegetables.">
+        <div class="option-title">Beef Rendang</div>
+        <div class="option-desc">Slow-cooked Indonesian beef in a rich, coconut-milk-based curry with a blend of spices, served with coconut rice and pickled vegetables.</div>
+      </button>
+      <button class="option-button" id="custom-option">Other (Custom)</button>
+    </div>
+  </div>
+  
+  <div id="confirmation-modal">
+    <div class="modal-content">
+      <p id="modal-text">Are you sure you want to choose "<span id="selected-title"></span>"?</p>
+      <div class="modal-buttons">
+        <button class="confirm-btn" id="confirm-yes">Yes</button>
+        <button class="cancel-btn" id="confirm-no">No</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const emojiContainer = document.getElementById('emoji-container');
+    const foodEmojis = ["🍛", "🍜", "🥘", "🍲"];
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+      emoji.style.top = Math.random() * 100 + '%';
+      emoji.style.left = Math.random() * 100 + '%';
+      emoji.style.animationDuration = (4 + Math.random() * 4) + 's';
+      emojiContainer.appendChild(emoji);
+      setTimeout(() => { emoji.remove(); }, 8000);
+    }
+    setInterval(createEmoji, 500);
+    
+    let selectedTitle = "";
+    let selectedDesc = "";
+    
+    const optionButtons = document.querySelectorAll('.option-button');
+    const modal = document.getElementById('confirmation-modal');
+    const selectedTitleSpan = document.getElementById('selected-title');
+    const confirmYes = document.getElementById('confirm-yes');
+    const confirmNo = document.getElementById('confirm-no');
+    
+    optionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        if(this.id === "custom-option") {
+          const customTitle = prompt("Enter your custom option title:");
+          if(customTitle && customTitle.trim() !== ""){
+            const customDesc = prompt("Enter your custom option description:");
+            if(customDesc && customDesc.trim() !== ""){
+              selectedTitle = customTitle.trim();
+              selectedDesc = customDesc.trim();
+              selectedTitleSpan.textContent = selectedTitle;
+              modal.style.display = "flex";
+            }
+          }
+        } else {
+          selectedTitle = this.getAttribute('data-title');
+          selectedDesc = this.getAttribute('data-desc');
+          selectedTitleSpan.textContent = selectedTitle;
+          modal.style.display = "flex";
+        }
+      });
+    });
+    
+    confirmYes.addEventListener('click', function() {
+      const courseData = { title: selectedTitle, description: selectedDesc };
+      localStorage.setItem('course3', JSON.stringify(courseData));
+      window.location.href = "course4.html";
+    });
+    
+    confirmNo.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course 1: Amuse-Bouche</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Lato', sans-serif;
+      /* A warm cream gradient background */
+      background: linear-gradient(135deg, #FFF9E1, #FFECB3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .container {
+      background: #FFFDF2; /* off-white cream */
+      border-radius: 10px;
+      padding: 2rem 3rem;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      color: #b58900; /* Warm Gold Accent */
+    }
+    p.description {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .option-button {
+      border: 2px solid #b58900;
+      border-radius: 5px;
+      padding: 1rem;
+      background: #fff8e1;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-align: left;
+    }
+    .option-button:hover {
+      background: #fff3cd;
+    }
+    .option-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #b58900;
+    }
+    .option-desc {
+      font-size: 1rem;
+      color: #777;
+    }
+    /* Floating Food Emojis */
+    .emoji-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      animation: float 8s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+    /* Confirmation Modal */
+    #confirmation-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .modal-content p {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .modal-buttons button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .confirm-btn { background: #27ae60; color: #fff; }
+    .cancel-btn { background: #e74c3c; color: #fff; }
+  </style>
+</head>
+<body>
+  <!-- Floating Emoji Container -->
+  <div class="emoji-container" id="emoji-container"></div>
+  
+  <div class="container">
+    <h1>Course 1: Amuse-Bouche</h1>
+    <p class="description">A few bite‐sized, flavor-packed introductions to whet the appetite.</p>
+    <div class="options">
+      <button class="option-button" data-title="Sesame Tofu Bites" data-desc="Silky cubes of tofu lightly pan-seared and rolled in toasted sesame seeds, finished with a drizzle of Sriracha-lime sauce.">
+        <div class="option-title">Sesame Tofu Bites</div>
+        <div class="option-desc">Silky cubes of tofu lightly pan-seared and rolled in toasted sesame seeds, finished with a drizzle of Sriracha-lime sauce.</div>
+      </button>
+      <button class="option-button" data-title="Mini Hummus Pita" data-desc="Creamy, homemade hummus with a sprinkle of za’atar, spread onto mini warm pita wedges.">
+        <div class="option-title">Mini Hummus Pita</div>
+        <div class="option-desc">Creamy, homemade hummus with a sprinkle of za’atar, spread onto mini warm pita wedges.</div>
+      </button>
+      <button class="option-button" data-title="Miso-Glazed Eggplant Medallions" data-desc="Tender slices of eggplant brushed with a savory miso glaze and garnished with thinly sliced scallions.">
+        <div class="option-title">Miso-Glazed Eggplant Medallions</div>
+        <div class="option-desc">Tender slices of eggplant brushed with a savory miso glaze and garnished with thinly sliced scallions.</div>
+      </button>
+      <button class="option-button" data-title="Labneh with Pomegranate Drizzle" data-desc="Smooth labneh topped with pomegranate molasses and crushed pistachios, served on a crisp flatbread.">
+        <div class="option-title">Labneh with Pomegranate Drizzle</div>
+        <div class="option-desc">Smooth labneh topped with pomegranate molasses and crushed pistachios, served on a crisp flatbread.</div>
+      </button>
+      <button class="option-button" data-title="Cucumber Salmon Cups" data-desc="Hollowed cucumber rounds filled with a delicate smoked salmon mousse, accented with lemon zest and dill.">
+        <div class="option-title">Cucumber Salmon Cups</div>
+        <div class="option-desc">Hollowed cucumber rounds filled with a delicate smoked salmon mousse, accented with lemon zest and dill.</div>
+      </button>
+      <button class="option-button" data-title="Spicy Edamame Puree Shots" data-desc="Vibrant edamame blended with a touch of chili oil and a sprinkle of sesame seeds, served in shot glasses.">
+        <div class="option-title">Spicy Edamame Puree Shots</div>
+        <div class="option-desc">Vibrant edamame blended with a touch of chili oil and a sprinkle of sesame seeds, served in shot glasses.</div>
+      </button>
+      <button class="option-button" id="custom-option">Other (Custom)</button>
+    </div>
+  </div>
+  
+  <!-- Confirmation Modal -->
+  <div id="confirmation-modal">
+    <div class="modal-content">
+      <p id="modal-text">Are you sure you want to choose "<span id="selected-title"></span>"?</p>
+      <div class="modal-buttons">
+        <button class="confirm-btn" id="confirm-yes">Yes</button>
+        <button class="cancel-btn" id="confirm-no">No</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Increase emoji count by creating an emoji every 500ms.
+    const emojiContainer = document.getElementById('emoji-container');
+    const foodEmojis = ["🍣", "🍤", "🍱", "🍢", "🥟"];
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+      emoji.style.top = Math.random() * 100 + '%';
+      emoji.style.left = Math.random() * 100 + '%';
+      emoji.style.animationDuration = (4 + Math.random() * 4) + 's';
+      emojiContainer.appendChild(emoji);
+      setTimeout(() => { emoji.remove(); }, 8000);
+    }
+    setInterval(createEmoji, 500);
+    
+    let selectedTitle = "";
+    let selectedDesc = "";
+    
+    const optionButtons = document.querySelectorAll('.option-button');
+    const modal = document.getElementById('confirmation-modal');
+    const selectedTitleSpan = document.getElementById('selected-title');
+    const confirmYes = document.getElementById('confirm-yes');
+    const confirmNo = document.getElementById('confirm-no');
+    
+    optionButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        if (this.id === "custom-option") {
+          // Prompt for custom title and description
+          const customTitle = prompt("Enter your custom option title:");
+          if(customTitle && customTitle.trim() !== ""){
+            const customDesc = prompt("Enter your custom option description:");
+            if(customDesc && customDesc.trim() !== ""){
+              selectedTitle = customTitle.trim();
+              selectedDesc = customDesc.trim();
+              selectedTitleSpan.textContent = selectedTitle;
+              modal.style.display = "flex";
+            }
+          }
+        } else {
+          selectedTitle = this.getAttribute('data-title');
+          selectedDesc = this.getAttribute('data-desc');
+          selectedTitleSpan.textContent = selectedTitle;
+          modal.style.display = "flex";
+        }
+      });
+    });
+    
+    confirmYes.addEventListener('click', function() {
+      // Save selection as an object in localStorage
+      const courseData = { title: selectedTitle, description: selectedDesc };
+      localStorage.setItem('course1', JSON.stringify(courseData));
+      window.location.href = "course2.html";
+    });
+    
+    confirmNo.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+  </script>
+</body>
+</html>

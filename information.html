@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Information</title>
+  <title>Informacja</title>
   <!-- Import Google Fonts for a classy vibe -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -15,24 +15,76 @@
     }
     body {
       font-family: 'Lato', sans-serif;
-      background: linear-gradient(135deg, #923cd9, #282fb9);
+      /* Updated animated gradient background with fun, vibrant colors */
+      background: linear-gradient(45deg, #ff6f61, #ffcc5c, #88d8b0, #92a8d1);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
       color: #333;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       overflow: hidden;
+      position: relative;
       padding: 20px;
     }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Animated overlay for extra depth */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 70%);
+      animation: moveOverlay 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes moveOverlay {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(25%, 25%) rotate(180deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+    /* Floating shapes container */
+    #floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .floating-shape {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0.3;
+      animation: drift 15s linear infinite;
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      50%  { transform: translate(20px, 20px) rotate(180deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+    /* Container styling with a decorative gradient border and semi‑transparent background */
     .container {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       padding: 2.5rem 3rem;
       text-align: center;
       max-width: 700px;
       width: 100%;
       animation: fadeInUp 0.8s ease-out;
+      position: relative;
+      z-index: 1;
+      border: 4px solid transparent;
+      border-image: linear-gradient(45deg, #ff6f61, #ffcc5c, #88d8b0, #92a8d1) 1;
     }
     @keyframes fadeInUp {
       from {
@@ -44,17 +96,29 @@
         transform: translateY(0);
       }
     }
+    /* Gradient text for a playful header */
     h1 {
       font-family: 'Playfair Display', serif;
       font-size: 3rem;
       margin-bottom: 1rem;
-      color: #444;
+      background: linear-gradient(45deg, #ff6f61, #ffcc5c, #88d8b0, #92a8d1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     p {
       font-size: 1.3rem;
       line-height: 1.6;
       margin-bottom: 2rem;
       color: #555;
+    }
+    /* Decorative divider */
+    .divider {
+      height: 3px;
+      border: none;
+      background: linear-gradient(90deg, #ff6f61, #ffcc5c, #88d8b0, #92a8d1);
+      margin: 1rem auto 2rem;
+      border-radius: 3px;
+      max-width: 80%;
     }
     .button-group {
       display: flex;
@@ -68,10 +132,11 @@
       font-size: 1.3rem;
       font-weight: 600;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       transition: transform 0.2s ease, background 0.3s ease;
       min-width: 150px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     button:hover {
       transform: scale(1.05);
@@ -127,16 +192,32 @@
 </head>
 <body>
   <div class="container">
-    <h1>Information</h1>
+    <h1>Informacje wstępne</h1>
     <p>
-      Placeholder text: Here you will find all the details about what comes next. Please read through the instructions carefully. We’re excited to have you continue this journey with us.
+      Hejka! Bardzo się cieszę, że się jednak zgodziłaś 😉
+      <p>
+      Przed Tobą zadanie stworzenia swojego spersonalizowanego menu na nasz wspólny wieczór. Na każde danie przygotowałem pare opcji do wyboru wraz z krótkim opisem oraz linkiem do przepisu (jeśli był). Oczywiście, jak do każdej porządnej kolacji, wino będzie zapewnione przez organizatora wydarzenia po skończeniu wybierania.
+      </p>
+      <p>
+        Jeśli jednak żadna opcja się nie spodoba, pozostawiłem Tobie także możliwość dodania własnego pomysłu! Wszystko powinno być w miarę jasne; jeśli jednak coś będzie niezrozumiałe, to śmiało pisz/dzwoń/pytaj :)
+      </p>
+      <p>
+        Mam nadzieję, że będziesz bawić się w połowie tak dobrze jak ja bawiłem się pisząc te strony!
+        <div> PS. Pamiętaj, żeby włączyć muzykę!!! </div>
+      </p>
     </p>
+    <hr class="divider" />
     <div class="button-group">
-      <button class="yes-button" id="info-yes">Proceed</button>
-      <button class="no-button" id="info-no">No</button>
+      <button class="yes-button" id="info-yes">Zabierz mnie dalej!</button>
+      <button class="no-button" id="info-no">Yyy... nie dziękuje</button>
     </div>
   </div>
+  
+  <!-- Floating shapes container -->
+  <div id="floating-shapes"></div>
+  
   <div class="emoji-overlay" id="emoji-overlay">😑</div>
+  
   <script>
     const infoYes = document.getElementById('info-yes');
     const infoNo = document.getElementById('info-no');
@@ -154,8 +235,26 @@
     });
 
     infoYes.addEventListener('click', function() {
-      window.location.href = "course1.html";
+      window.location.href = "courses.html";
     });
+    
+    // Generate floating food icons for the background
+    const floatingShapesContainer = document.getElementById('floating-shapes');
+    const shapeEmojis = ['🍕', '🍔', '🍟', '🌭', '🍿', '🍩', '🍪', '🍰', '🥗', '🍜'];
+    const shapeCount = 30;
+    
+    for (let i = 0; i < shapeCount; i++) {
+      const shape = document.createElement('span');
+      shape.classList.add('floating-shape');
+      shape.textContent = shapeEmojis[Math.floor(Math.random() * shapeEmojis.length)];
+      // Randomize position
+      shape.style.top = Math.random() * 100 + '%';
+      shape.style.left = Math.random() * 100 + '%';
+      // Randomize animation duration and delay for variety
+      shape.style.animationDuration = (10 + Math.random() * 10) + 's';
+      shape.style.animationDelay = Math.random() * 5 + 's';
+      floatingShapesContainer.appendChild(shape);
+    }
   </script>
 </body>
 </html>

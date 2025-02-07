@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Top Secret Access</title>
+  <title>Secret Website</title>
   <style>
     :root {
       --primary-color: #0f0;       /* Neon green */
@@ -29,6 +29,15 @@
       position: relative;
       overflow: hidden;
       padding: 20px;
+    }
+    /* Matrix effect canvas (digital rain) */
+    #matrix {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
     }
     /* Container for floating random numbers */
     #number-container {
@@ -87,8 +96,15 @@
       margin-bottom: 1rem;
       color: var(--primary-color);
     }
-    input[type="password"] {
-      width: 100%;
+    /* Password container with toggle button */
+    .password-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .password-container input[type="password"],
+    .password-container input[type="text"] {
+      flex: 1;
       padding: 0.75rem;
       font-size: 1.2rem;
       border: 2px solid var(--primary-color);
@@ -96,13 +112,28 @@
       background: transparent;
       color: var(--primary-color);
       outline: none;
-      margin-bottom: 1rem;
       transition: border-color 0.3s ease;
     }
-    input[type="password"]:focus {
+    .password-container input[type="password"]:focus,
+    .password-container input[type="text"]:focus {
       border-color: var(--secondary-color);
     }
-    button {
+    .password-container button {
+      margin-left: 5px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: var(--primary-color);
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .password-container button:hover {
+      background: var(--secondary-color);
+      transform: scale(1.05);
+    }
+    button.submit-btn {
       padding: 0.75rem 1.5rem;
       font-size: 1.1rem;
       border: none;
@@ -112,7 +143,23 @@
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
-    button:hover {
+    button.submit-btn:hover {
+      background-color: var(--secondary-color);
+      transform: scale(1.05);
+    }
+    /* Play Music & Stop Music button styling */
+    #play-music-btn, #stop-music-btn {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--primary-color);
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    #play-music-btn:hover, #stop-music-btn:hover {
       background-color: var(--secondary-color);
       transform: scale(1.05);
     }
@@ -144,39 +191,55 @@
     @media (max-width: 600px) {
       .container { padding: 1.5rem; }
       h1 { font-size: 2rem; }
-      input[type="password"] { font-size: 1rem; }
-      button { font-size: 1rem; }
+      .password-container input { font-size: 1rem; }
+      .password-container button { font-size: 0.9rem; }
+      button.submit-btn, #play-music-btn, #stop-music-btn { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Background music (change the src as needed) -->
+  <!-- Background music (placeholder from music folder) -->
   <audio id="bg-music" autoplay loop>
-    <source src="music/index_music.mp3" type="audio/mpeg">
+    <source src="music/detective-spy-music-182835.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
+
+  <!-- Matrix effect canvas -->
+  <canvas id="matrix"></canvas>
+
   <!-- Container for floating random numbers -->
   <div id="number-container"></div>
+
   <div class="container">
     <div id="attempt-counter">Attempts: 0</div>
-    <h1>Top Secret Access</h1>
+    <h1>Top Ultra Secret Website Access</h1>
     <div class="initial-hint" id="initial-hint">
-      Hint: Enter the secret code.
+      Hasło to: twoje inicjały + moje inicjały + data stania się oficjalnie parą (format: DDMMYY).
+      <div>
+      Przykład poprawnie sformatowanego hasła: ABCDEF220507
+      </div>
     </div>
-    <input type="password" id="password" placeholder="Password" autofocus>
-    <button onclick="checkPassword()">Submit</button>
+    <!-- Password input with toggle -->
+    <div class="password-container">
+      <input type="password" id="password" placeholder="Password" autofocus>
+      <button id="toggle-password" type="button">Show</button>
+    </div>
+    <button class="submit-btn" onclick="checkPassword()">Submit</button>
+    <!-- Play Music and Stop Music buttons -->
+    <button id="play-music-btn" type="button">Play Music</button>
+    <button id="stop-music-btn" type="button">Stop Music</button>
     <div class="hints-container" id="hints-container"></div>
   </div>
 
   <script>
-    // Set your secret password here
-    const correctPassword = "mysecretpassword"; // Change as desired
+
+    const correctPassword = "AMSRKI110125"; 
 
     // Hints to display after failed attempts.
     const hints = [
-      "Hint 1: The password is a combination of letters and numbers.",
-      "Hint 2: It might be related to your favorite pet's name.",
-      "Final Hint: The password is 'mysecretpassword'."
+      "Hint 1: Pamietaj, ze oboje mamy drugie imiona.",
+      "Hint 2: Oficjalnie stalismy sie para w styczniu.",
+      "Disappointing..., here's the password for trying tho: AMSRKI110125."
     ];
 
     let attempts = 0;
@@ -200,7 +263,6 @@
           displayedHints++;
         }
         animateError();
-        alert("Incorrect password. Try again.");
       }
     }
 
@@ -227,13 +289,24 @@
       }
     });
 
+    // Toggle password visibility
+    document.getElementById("toggle-password").addEventListener("click", function() {
+      const pwdField = document.getElementById("password");
+      if(pwdField.type === "password") {
+        pwdField.type = "text";
+        this.textContent = "Hide";
+      } else {
+        pwdField.type = "password";
+        this.textContent = "Show";
+      }
+    });
+
     // Generate random floating numbers in the background
     const numberContainer = document.getElementById("number-container");
-    const numberCount = 10;
+    const numberCount = 30;
     for (let i = 0; i < numberCount; i++) {
       const numberElem = document.createElement("div");
       numberElem.classList.add("number");
-      // Random number between 0 and 9999
       numberElem.textContent = Math.floor(Math.random() * 10000);
       numberElem.style.top = Math.random() * 100 + '%';
       numberElem.style.left = Math.random() * 100 + '%';
@@ -241,6 +314,67 @@
       numberElem.style.animationDelay = Math.random() * 5 + 's';
       numberContainer.appendChild(numberElem);
     }
+
+    // Matrix effect (digital rain)
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()-+=<>?".split("");
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0f0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+
+    // Set background music volume to a lower level
+    const bgMusic = document.getElementById("bg-music");
+    bgMusic.volume = 0.3;
+
+    // Unmute audio on first user interaction (if needed)
+    document.body.addEventListener('click', function() {
+      if(bgMusic.paused) {
+        bgMusic.play();
+      }
+      if(bgMusic.muted) {
+        bgMusic.muted = false;
+      }
+    }, { once: true });
+
+    // "Play Music" button to manually start playback if autoplay fails
+    document.getElementById("play-music-btn").addEventListener("click", function() {
+      bgMusic.play();
+      bgMusic.muted = false;
+    });
+
+    // "Stop Music" button functionality
+    document.getElementById("stop-music-btn").addEventListener("click", function() {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    });
   </script>
 </body>
 </html>
