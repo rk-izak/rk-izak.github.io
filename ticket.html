@@ -19,7 +19,9 @@
       font-family: 'Lato', sans-serif;
       color: #D4AF37;
       position: relative;
-      overflow: hidden;
+      /* Allow vertical scrolling while keeping horizontal overflow hidden */
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     :root {
@@ -325,7 +327,7 @@
   <div class="ticket-container">
     <div class="ticket-main">
       <div class="ticket-header">Dinner&nbsp;Invitation&nbsp;Ticket</div>
-      <p class="subtitle">Admit one for a CRAZY evening</p>
+      <p class="subtitle">Admit one for a magical evening</p>
       <!-- Guest photo (hidden if missing) -->
       <img src="invite_photo.JPEG" alt="Guest Photo" class="ticket-photo" onerror="this.style.display='none'">
       <div class="contact-details">
@@ -334,7 +336,7 @@
         <div class="detail-row"><span class="icon">📅</span><span><strong>Date:</strong> 14&nbsp;February&nbsp;2026</span></div>
         <div class="detail-row"><span class="icon">⏰</span><span><strong>Start&nbsp;Time:</strong> 19:00</span></div>
         <div class="detail-row"><span class="icon">📍</span><span><strong>Venue:</strong> Sokratesa&nbsp;13C – Apartment&nbsp;196</span></div>
-        <p class="note">Please bring this ticket – it’s your key to our dinner.</p>
+        <p class="note">Please bring this ticket – it’s your key to our romantic dinner.</p>
       </div>
 
       <!-- No highlights here to avoid duplicating details from the event page -->
