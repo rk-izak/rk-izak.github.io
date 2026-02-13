@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pigeon Delivery</title>
+  <!-- Romantic fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e91e63;       /* Vibrant pink */
+      --secondary: #f8bbd0;     /* Soft pink */
+      --accent: #ff4081;        /* Bright pink */
+      --bg-start: #ff9a9e;      /* Warm pastel gradient */
+      --bg-end: #fad0c4;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Playfair Display', serif;
+      /* Use a hand‑drawn inspired pastel background with hearts */
+      background: url('images/pigeon_handdrawn_bg.png') center/cover fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      color: #4e1c36;
+    }
+    /* Hide audio element controls */
+    audio { display: none; }
+    .container {
+      text-align: center;
+      z-index: 2;
+      max-width: 800px;
+      padding: 2rem;
+    }
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    p.description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #5d2a4c;
+    }
+    /* Remove narrative text styling because the page design itself will carry the mood */
+    .pigeon-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+    /* Add a glowing aura around the pigeon for extra magic */
+    .pigeon-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /* Increase the aura size to better frame the larger pigeon */
+      width: 420px;
+      height: 420px;
+      margin-left: -210px;
+      margin-top: -210px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 70%);
+      animation: pulseGlow 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes pulseGlow {
+      0%   { transform: scale(0.9); opacity: 0.5; }
+      50%  { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.5; }
+    }
+    .pigeon-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /* Increase ring size to match bigger pigeon */
+      width: 520px;
+      height: 520px;
+      margin-left: -260px;
+      margin-top: -260px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spinRing 25s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .pigeon-image {
+      /* Make the hand‑drawn pigeon larger for better focus */
+      width: 500px;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateX(100%);
+      animation: flyIn 3s ease-out forwards;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+    }
+    @keyframes flyIn {
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    /* Orbiting hearts around the pigeon */
+    .orbit-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+    }
+    .orbit-heart {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background-color: var(--accent);
+      transform: rotate(45deg);
+      border-radius: 2px;
+    }
+    .orbit-heart::before,
+    .orbit-heart::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    .orbit-heart::before { top: -9px; left: 0; }
+    .orbit-heart::after  { top: 0; left: -9px; }
+    /* Define multiple orbit animations with varying speeds and distances */
+    @keyframes orbit1 {
+      from { transform: rotate(0deg) translateX(170px) rotate(0deg); }
+      to   { transform: rotate(360deg) translateX(170px) rotate(-360deg); }
+    }
+    @keyframes orbit2 {
+      from { transform: rotate(0deg) translateX(130px) rotate(0deg); }
+      to   { transform: rotate(360deg) translateX(130px) rotate(-360deg); }
+    }
+    @keyframes orbit3 {
+      from { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+      to   { transform: rotate(360deg) translateX(90px) rotate(-360deg); }
+    }
+    .open-btn {
+      padding: 1rem 2rem;
+      font-size: 1.4rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .open-btn:hover {
+      background: var(--accent);
+      transform: scale(1.05);
+    }
+    /* Floating hearts for subtle animation */
+    .decor-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--primary);
+      transform: rotate(45deg);
+      opacity: 0.5;
+      animation: floatHeart 12s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--primary);
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      top: 0;
+      left: -10px;
+    }
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      10% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    }
+
+    /* Floating envelope shapes for added visual interest */
+    .envelope {
+      position: absolute;
+      width: 26px;
+      height: 18px;
+      background-color: #fff;
+      border: 2px solid var(--primary);
+      border-radius: 3px;
+      transform: rotate(0deg);
+      opacity: 0.7;
+      animation: floatEnvelope 14s linear infinite;
+    }
+    /* Triangle flap for the envelope */
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: -11px;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 13px solid transparent;
+      border-right: 13px solid transparent;
+      border-bottom: 11px solid #fff;
+      border-bottom-color: #fff;
+    }
+    @keyframes floatEnvelope {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.9; }
+      100% { transform: translateY(-15vh) rotate(180deg); opacity: 0; }
+    }
+
+    /* Sparkle stars */
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #ffe082;
+      box-shadow: 0 0 6px 2px rgba(255,224,130,0.6);
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: floatSparkle 14s linear infinite;
+    }
+    @keyframes floatSparkle {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+    /* Trailing hearts emitted from the pigeon */
+    .trail-heart {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background-color: var(--accent);
+      transform: rotate(45deg);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 0;
+      animation: trailMove 4s linear forwards;
+    }
+    .trail-heart::before,
+    .trail-heart::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    .trail-heart::before { top: -7px; left: 0; }
+    .trail-heart::after  { top: 0; left: -7px; }
+    @keyframes trailMove {
+      0% { opacity: 0.8; transform: translate(0,0) scale(1) rotate(45deg); }
+      100% { opacity: 0; transform: translate(var(--dx), -80px) scale(0.6) rotate(45deg); }
+    }
+    /* Music control buttons */
+
+    /* Action wrapper positions the invitation button */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    /* Icon styling for buttons */
+    .btn-icon {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background music for the pigeon page -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music/pigeon.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="decor-container" id="decor"></div>
+  <div class="container">
+    <h1>You’ve Got Mail!</h1>
+    <p class="description">A special message is winging its way to you.</p>
+    <div class="pigeon-wrapper">
+      <img src="images/handdrawn_pigeon.png" alt="Hand drawn carrier pigeon" class="pigeon-image">
+      <!-- Orbiting hearts around the pigeon for extra whimsy -->
+      <div class="orbit-container">
+        <div class="orbit-heart" style="animation: orbit1 18s linear infinite;"></div>
+        <div class="orbit-heart" style="animation: orbit2 24s linear infinite;"></div>
+        <div class="orbit-heart" style="animation: orbit3 30s linear infinite;"></div>
+      </div>
+    </div>
+    <!-- Action section groups the invitation button and music controls for better placement -->
+    <div class="actions">
+      <button class="open-btn" onclick="openInvitation()"><span class="btn-icon">✉</span>Open Invitation</button>
+    </div>
+  </div>
+  <script>
+    function openInvitation() {
+      window.location.href = 'event.html';
+    }
+    // Generate floating hearts and envelopes at random positions and times
+    const decorContainer = document.getElementById('decor');
+    // Increase the number of floating hearts and envelopes to add more movement
+    const heartCount = 34;
+    const envelopeCount = 18;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.left = Math.random() * 100 + '%';
+      const duration = 8 + Math.random() * 6;
+      heart.style.animationDuration = duration + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      // Randomize heart size for more variety
+      const size = 10 + Math.random() * 25;
+      heart.style.width = size + 'px';
+      heart.style.height = size + 'px';
+      decorContainer.appendChild(heart);
+    }
+    for (let i = 0; i < envelopeCount; i++) {
+      const envelope = document.createElement('div');
+      envelope.classList.add('envelope');
+      envelope.style.top = Math.random() * 100 + '%';
+      envelope.style.left = Math.random() * 100 + '%';
+      const duration = 10 + Math.random() * 6;
+      envelope.style.animationDuration = duration + 's';
+      envelope.style.animationDelay = Math.random() * 5 + 's';
+      // random rotation to add whimsy
+      envelope.style.transform = 'rotate(' + (Math.random() * 30 - 15) + 'deg)';
+      decorContainer.appendChild(envelope);
+    }
+    // Generate floating sparkles for extra magic
+    const sparkleCount = 40;
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.left = Math.random() * 100 + '%';
+      const duration = 10 + Math.random() * 8;
+      sparkle.style.animationDuration = duration + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
+      // randomize size
+      const size = 4 + Math.random() * 6;
+      sparkle.style.width = size + 'px';
+      sparkle.style.height = size + 'px';
+      decorContainer.appendChild(sparkle);
+    }
+
+    // Emit trailing hearts from the pigeon as it flies
+    const wrapper = document.querySelector('.pigeon-wrapper');
+    const pigeonImg = document.querySelector('.pigeon-image');
+    function emitHeart() {
+      // Create heart element
+      const heart = document.createElement('div');
+      heart.classList.add('trail-heart');
+      // Compute random horizontal offset for travel and start position relative to wrapper
+      const offset = (Math.random() - 0.5) * 120; // range [-60,60]
+      heart.style.setProperty('--dx', offset + 'px');
+      heart.style.left = (wrapper.clientWidth / 2 - 7 + offset) + 'px';
+      heart.style.top = (wrapper.clientHeight / 2) + 'px';
+      wrapper.appendChild(heart);
+      // Remove heart after animation completes
+      setTimeout(() => heart.remove(), 4000);
+    }
+    // Start emitting hearts periodically after pigeon appears
+    setTimeout(() => {
+      // Emit trailing hearts slightly more frequently to emphasise movement
+      setInterval(emitHeart, 1000);
+    }, 1000);
+    // Music controls
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.4;
+    document.body.addEventListener('click', function() {
+      if(bgMusic.paused) bgMusic.play();
+      bgMusic.muted = false;
+    }, { once: true });
+    // Remove manual play/stop controls. Music will autoplay and unmute on first click anywhere.
+  </script>
+</body>
+</html>

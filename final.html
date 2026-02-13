@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invitation Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Base and Animated Background in Gold/Black */
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #000, #1a1a1a);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      color: #D4AF37;
+      position: relative;
+      overflow-y: auto;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Animated Gold Sparkle Overlay */
+    .bg-sparkle {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(212,175,55,0.15), transparent 70%);
+      animation: sparkle 10s linear infinite;
+      z-index: -1;
+      opacity: 0.8;
+    }
+    @keyframes sparkle {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(50px, 50px); }
+      100% { transform: translate(0, 0); }
+    }
+    /* Glassmorphism Container */
+    .container {
+      background: rgba(0, 0, 0, 0.85);
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(212,175,55,0.7);
+      border: 1px solid #D4AF37;
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #D4AF37;
+      padding-bottom: 0.5rem;
+      color: #D4AF37;
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0% { text-shadow: 0 0 10px #D4AF37; }
+      50% { text-shadow: 0 0 20px #fff, 0 0 30px #D4AF37; }
+      100% { text-shadow: 0 0 10px #D4AF37; }
+    }
+    /* Guest Photo and Invitation Details */
+    .guest-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .guest-photo-container {
+      text-align: center;
+    }
+    .guest-photo {
+      max-width: 200px;
+      width: 100%;
+      border: 3px solid #D4AF37;
+      border-radius: 10px;
+    }
+    .guest-photo-caption {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      color: #fff;
+    }
+    .guest-details {
+      max-width: 500px;
+      text-align: left;
+      font-size: 1.1rem;
+    }
+    .guest-details ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0;
+    }
+    .guest-details li {
+      margin: 0.5rem 0;
+    }
+    .guest-details li strong {
+      color: #D4AF37;
+    }
+    /* Map */
+    .map-container {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    .map-container iframe {
+      width: 100%;
+      max-width: 800px;
+      height: 450px;
+      border: 0;
+      border-radius: 10px;
+    }
+    /* Music Preferences */
+    .music-preferences {
+      margin: 2rem 0;
+      text-align: left;
+    }
+    .music-preferences h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #D4AF37;
+    }
+    .music-preferences p {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    .spotify-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .spotify-grid iframe {
+      width: 100%;
+      height: 80px;
+      border: none;
+      border-radius: 5px;
+    }
+    /* Ticket Section */
+    .ticket-section {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .ticket-section p {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .ticket-download-btn {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #D4AF37;
+      color: #000;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .ticket-download-btn:hover {
+      background: #b4942a;
+      transform: scale(1.05);
+    }
+    /* Finalise Invitation Section */
+    .finalise-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .finalise-section p {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .finalise-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .finalise-buttons button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #D4AF37;
+      color: #000;
+      transition: background 0.3s, transform 0.3s;
+      max-width: 200px;
+    }
+    .finalise-buttons button:hover {
+      background: #b4942a;
+      transform: scale(1.05);
+    }
+    /* Music controls removed; music plays automatically */
+    /* Initial Overlay */
+    .initial-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    .initial-overlay button {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background: #D4AF37;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .initial-overlay button:hover {
+      transform: scale(1.05);
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .guest-details { font-size: 1rem; }
+      .finalise-buttons button { font-size: 1rem; padding: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Initial Overlay with "Let's see the menu" Button and Placeholder Music -->
+  <div class="initial-overlay" id="initialOverlay">
+    <button id="startButton">Now, for the complete invitation...</button>
+  </div>
+  
+  <div class="bg-sparkle"></div>
+  <div class="container">
+    <h1>Thank You for Choosing Us!</h1>
+    
+    <!-- Guest Photo and Invitation Details -->
+    <div class="guest-info">
+      <div class="guest-photo-container">
+        <img src="invite_photo.JPEG" alt="Guest Photo" class="guest-photo">
+        <div class="guest-photo-caption">Guest Photo</div>
+      </div>
+      <div class="guest-details invitation">
+        <p><strong>Your invitation details are as follows:</strong></p>
+        <ul>
+          <li><strong>Full Name:</strong> Anna Maria Samoraj</li>
+          <li><strong>Dress Code:</strong> <span style="font-weight:bold;">Formal/Semi-Formal (recomennded)</span></li>
+          <li><strong>Date:</strong> <span style="font-weight:bold;">14.02.2025</span></li>
+          <li><strong>Start Time:</strong> <span style="font-weight:bold;">17:00/5pm</span></li>
+          <li><strong>Restaurant Address:</strong> <span style="font-weight:bold;">Sokratesa 13C, 01-909 Warsaw, Poland</span></li>
+        </ul>
+        <p>Thank you for choosing our restaurant for this special day! Our staff cannot wait to see you there.</p>
+      </div>
+    </div>
+    
+    <!-- Map -->
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.142772726075!2d21.015847316020603!3d52.24529027975937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471eccdd23e0fddd%3A0x26e11a3f7c80b8ed!2sSokratesa%2013C%2C%2001-909%20Warsaw%2C%20Poland!5e0!3m2!1sen!2sus!4v1614972735432!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    
+    <!-- Music Preferences -->
+    <div class="music-preferences">
+      <h2>Music Preferences</h2>
+      <p>If you have a preferred Spotify playlist or track, please have it ready on the day. Our staff, once informed in advance, will accommodate accordingly.</p>
+      <p><em>If you need some suggestions, our staff highly recommends the following:</em></p>
+      <div class="spotify-grid">
+        <iframe src="https://open.spotify.com/embed/track/6BrMEbPSSj55nQhkgf6DnE?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/4LpUpiYoZ2M3Z1kmhn4EQo?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/1NeLwFETswx8Fzxl2AFl91?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/1XrSjpNe49IiygZfzb74pk?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6dBUzqjtbnIa1TwYbyw5CM?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/1aOxOpH4AkGAd8OMrKjyNY?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/0f8eRy9A0n6zXpKSHSCAEp?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/7IBzp33O4Hjr92wXtH3yQJ?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/4zXuYQNDmw3dlauyc8q3Kd?utm_source=generator" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/1NaDK3atogQEn9glK5fYuy?utm_source=generator" allow="encrypted-media"></iframe>
+      </div>
+    </div>
+    
+    <!-- Ticket Section -->
+    <div class="ticket-section">
+      <p><strong>Please, download and save this ticket as it WILL be checked on entry.</strong></p>
+      <button class="ticket-download-btn" onclick="window.open('ticket.html', '_blank')">Download Ticket</button>
+    </div>
+    
+    <!-- Finalise Invitation Section -->
+    <div class="finalise-section">
+      <p>Finalise invitation?</p>
+      <div class="finalise-buttons">
+        <button id="finalise-yes">Yes</button>
+        <button id="finalise-no">No</button>
+      </div>
+    </div>
+    
+    <!-- Music will play automatically without visible controls -->
+    
+  </div>
+  
+  <!-- Placeholder Audio for Musing -->
+  <audio id="menuMusic" src="./music/Ratatouille Soundtrack-1 Le Festin (Camille).mp3" loop></audio>
+  
+  <script>
+    // Initial overlay logic: When the user clicks the button, hide the overlay and play music from 22 seconds in.
+    const initialOverlay = document.getElementById('initialOverlay');
+    const startButton = document.getElementById('startButton');
+    const menuMusic = document.getElementById('menuMusic');
+    startButton.addEventListener('click', function() {
+      initialOverlay.style.display = 'none';
+      menuMusic.currentTime = 22; // Start the music 22 seconds in
+      menuMusic.play().catch(e => console.log("Music play error:", e));
+    });
+    
+    /***** Finalise Invitation Buttons *****/
+    document.getElementById('finalise-yes').addEventListener('click', function() {
+      window.location.href = "end.html";
+    });
+    document.getElementById('finalise-no').addEventListener('click', function() {
+      window.open("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExejlhNzY3N3Rmd2plMjdraWMyNWFhMnNjaGJ0Zzh5ZmJ1eGVxa3J3diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fhLgA6nJec3Cw/giphy.gif", "_blank");
+    });
+    
+    // Remove manual music controls. Music will autoplay and loop.
+  </script>
+</body>
+</html>

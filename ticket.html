@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Ticket</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      /* Use our custom hand‑crafted starry backdrop */
+      background: url('images/starry_bg_custom.png') center/cover fixed;
+      font-family: 'Lato', sans-serif;
+      color: #D4AF37;
+      position: relative;
+      overflow: hidden;
+    }
+
+    :root {
+      /* Pink accent for hearts */
+      --accent: #e91e63;
+    }
+
+    /* Dark overlay to improve readability on starry background */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .ticket-container {
+      display: flex;
+      align-items: stretch;
+      background: transparent;
+      border: 2px solid #D4AF37;
+      border-radius: 18px;
+      overflow: hidden;
+      max-width: 850px;
+      width: 100%;
+      box-shadow: 0 12px 32px rgba(212,175,55,0.6);
+      animation: fadeIn 1s ease-out;
+       position: relative;
+       z-index: 1;
+       /* Blur the backdrop behind the ticket for readability */
+       backdrop-filter: blur(6px);
+       -webkit-backdrop-filter: blur(6px);
+    }
+
+    /* Decorative perforation on both ends of the ticket */
+    .ticket-container::before,
+    .ticket-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 4px,
+        rgba(212,175,55,0.4) 4px,
+        rgba(212,175,55,0.4) 8px
+      );
+    }
+    .ticket-container::before { left: -20px; }
+    .ticket-container::after  { right: -20px; }
+    /* Main section of the ticket holding event details */
+    .ticket-main {
+      flex: 3;
+      background: rgba(0, 0, 0, 0.92);
+      padding: 2.5rem 2rem;
+      color: #D4AF37;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      border-right: 2px dashed #D4AF37;
+    }
+    .ticket-stub {
+      flex: 1;
+      /* Soft striped gradient on the stub to distinguish it from the main panel */
+      background: repeating-linear-gradient(45deg,
+        rgba(212,175,55,0.4), rgba(212,175,55,0.4) 12px,
+        rgba(212,175,55,0.15) 12px, rgba(212,175,55,0.15) 24px
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      position: relative;
+    }
+
+    .ticket-stub .heart-row {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 0.4rem;
+      color: #D4AF37;
+    }
+    .ticket-stub span {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 1.4rem;
+      color: #D4AF37;
+      letter-spacing: 0.25rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .ticket-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      color: #D4AF37;
+    }
+
+    .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: #bca45a;
+      margin-top: -0.4rem;
+      margin-bottom: 1.6rem;
+      text-align: center;
+      position: relative;
+    }
+    .subtitle::after {
+      content: '';
+      display: block;
+      width: 120px;
+      height: 1.5px;
+      margin: 0.5rem auto 0;
+      background: linear-gradient(to right, transparent, #D4AF37, transparent);
+    }
+    .ticket-photo {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 3px solid #D4AF37;
+      border-radius: 10px;
+      margin: 0 auto;
+    }
+    .contact-details {
+      margin: 1rem 0;
+      width: 100%;
+      font-size: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .contact-details .detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .contact-details .detail-row .icon {
+      font-size: 1.3rem;
+      color: #D4AF37;
+      line-height: 1;
+    }
+    .contact-details .detail-row span {
+      color: #D4AF37;
+    }
+    .contact-details .note {
+      margin-top: 1rem;
+      font-style: italic;
+      font-size: 1rem;
+      color: #bca45a;
+      text-align: center;
+    }
+
+    /* Highlights section within the ticket */
+    .ticket-highlights {
+      text-align: left;
+      margin: 1rem 0;
+      width: 100%;
+    }
+    .ticket-highlights h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+      color: #D4AF37;
+    }
+    .ticket-highlights ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: #cbb46a;
+    }
+    .ticket-highlights li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+      font-size: 1.1rem;
+    }
+    .ticket-highlights li .icon {
+      font-size: 1.3rem;
+      color: #D4AF37;
+      line-height: 1;
+    }
+    /* Holographic Seal (Animated) */
+    .holo-seal {
+      margin: 2rem auto 0;
+      width: 120px;
+      height: 120px;
+      border: 3px solid #D4AF37;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      animation: rotateSeal 5s linear infinite;
+    }
+    @keyframes rotateSeal {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .holo-seal::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(212,175,55,0.3), transparent 70%);
+      animation: pulseSeal 3s ease-in-out infinite;
+    }
+    @keyframes pulseSeal {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+    /* Seal Logo (Added) */
+    .seal-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1; /* Ensures the logo appears above the animated seal */
+      pointer-events: none;
+    }
+    .seal-logo svg {
+      width: 70px;
+      height: 70px;
+    }
+
+    /* Floating star sparkles for ambience */
+    .decor-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #D4AF37;
+      box-shadow: 0 0 6px 2px rgba(212,175,55,0.7);
+      opacity: 0.8;
+      border-radius: 50%;
+      animation: floatSparkle 14s linear infinite;
+    }
+    @keyframes floatSparkle {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
+    /* Floating hearts for extra romance */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      transform: rotate(45deg);
+      opacity: 0.4;
+      animation: floatHeart 14s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after  { top: 0; left: -10px; }
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating sparkles container for subtle animation -->
+  <div class="decor-container" id="decor"></div>
+  <!-- Background music for the ticket page -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music/ticket.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="ticket-container">
+    <div class="ticket-main">
+      <div class="ticket-header">Dinner&nbsp;Invitation&nbsp;Ticket</div>
+      <p class="subtitle">Admit one for a CRAZY evening</p>
+      <!-- Guest photo (hidden if missing) -->
+      <img src="invite_photo.JPEG" alt="Guest Photo" class="ticket-photo" onerror="this.style.display='none'">
+      <div class="contact-details">
+        <div class="detail-row"><span class="icon">👤</span><span><strong>Name:</strong> Martyna&nbsp;Groszewska</span></div>
+        <div class="detail-row"><span class="icon">🎩</span><span><strong>Dress&nbsp;Code:</strong> Formal / semi‑formal</span></div>
+        <div class="detail-row"><span class="icon">📅</span><span><strong>Date:</strong> 14&nbsp;February&nbsp;2026</span></div>
+        <div class="detail-row"><span class="icon">⏰</span><span><strong>Start&nbsp;Time:</strong> 19:00</span></div>
+        <div class="detail-row"><span class="icon">📍</span><span><strong>Venue:</strong> Sokratesa&nbsp;13C – Apartment&nbsp;196</span></div>
+        <p class="note">Please bring this ticket – it’s your key to our dinner.</p>
+      </div>
+
+      <!-- No highlights here to avoid duplicating details from the event page -->
+      <!-- Holographic Seal with Custom Monogram -->
+      <div class="holo-seal">
+        <div class="seal-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <!-- Outer circle (decorative element) -->
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#D4AF37" stroke-width="5"/>
+            <!-- Monogram initials -->
+            <text x="50%" y="55%" text-anchor="middle" fill="#D4AF37" font-size="30" font-family="'Playfair Display', serif" dy=".3em">MG</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <!-- Ticket stub for decorative tear-off section -->
+    <div class="ticket-stub">
+      <span>INVITATION</span>
+      <div class="heart-row">❤️ ❤️ ❤️</div>
+    </div>
+  </div>
+  <script>
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.4;
+    document.body.addEventListener('click', function(){
+      if(bgMusic.paused) bgMusic.play();
+      bgMusic.muted = false;
+    }, { once: true });
+    // Remove manual play/stop controls. Music will autoplay and unmute on first interaction.
+
+    // Generate floating star sparkles for the ticket page
+    const decorContainer = document.getElementById('decor');
+    const sparkleCount = 35;
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.left = Math.random() * 100 + '%';
+      const duration = 10 + Math.random() * 8;
+      sparkle.style.animationDuration = duration + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
+      const size = 4 + Math.random() * 6;
+      sparkle.style.width = size + 'px';
+      sparkle.style.height = size + 'px';
+      decorContainer.appendChild(sparkle);
+    }
+
+    // Also generate floating hearts for extra romance
+    const heartCount = 18;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.left = Math.random() * 100 + '%';
+      const durationH = 12 + Math.random() * 6;
+      heart.style.animationDuration = durationH + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      const sizeH = 12 + Math.random() * 16;
+      heart.style.width = sizeH + 'px';
+      heart.style.height = sizeH + 'px';
+      decorContainer.appendChild(heart);
+    }
+  </script>
+</body>
+</html>

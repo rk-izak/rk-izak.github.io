@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Base Styles & Centering */
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #000, #141414);
+      position: relative;
+      overflow-y: auto;
+      color: #fff;
+    }
+    
+    /* Animated Gold Sparkle Overlay */
+    .bg-sparkle {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(212,175,55,0.15), transparent 70%);
+      animation: sparkle 10s linear infinite;
+      z-index: -1;
+      opacity: 0.8;
+    }
+    @keyframes sparkle {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(50px, 50px); }
+      100% { transform: translate(0, 0); }
+    }
+    
+    /* Glassmorphism Container in Gold/Black */
+    .menu-container {
+      max-width: 800px;
+      width: 90%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 12px 32px rgba(212,175,55,0.5);
+      border: 1px solid #D4AF37;
+      margin: 20px auto;
+      animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #D4AF37;
+      padding-bottom: 0.5rem;
+      color: #D4AF37;
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0% { text-shadow: 0 0 10px #D4AF37; }
+      50% { text-shadow: 0 0 20px #fff, 0 0 30px #D4AF37; }
+      100% { text-shadow: 0 0 10px #D4AF37; }
+    }
+    
+    /* Notice Block with Gold Accents */
+    .notice {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #D4AF37;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    }
+    .notice p {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .notice a {
+      color: #D4AF37;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .notice button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #D4AF37;
+      color: #000;
+      transition: background 0.3s, transform 0.3s;
+      margin-top: 10px;
+    }
+    .notice button:hover {
+      background: #b4942a;
+      transform: scale(1.05);
+    }
+    
+    /* Course Entries */
+    .course {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed #555;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .course:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(212,175,55,0.5);
+    }
+    .course h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+      color: #D4AF37;
+      text-align: center;
+    }
+    .course p {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+      color: #ccc;
+      text-align: center;
+    }
+    .course a {
+      color: #D4AF37;
+      text-decoration: none;
+      position: relative;
+    }
+    .course a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: #D4AF37;
+      transition: width 0.3s;
+    }
+    .course a:hover::after {
+      width: 100%;
+    }
+    
+    /* Button Group */
+    .buttons {
+      text-align: center;
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .buttons button {
+      flex: 1 1 auto;
+      padding: 1rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #D4AF37;
+      color: #000;
+      transition: background 0.3s, transform 0.3s;
+      max-width: 200px;
+    }
+    .buttons button:hover {
+      background: #b4942a;
+      transform: scale(1.05);
+    }
+    .restart-btn {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .restart-btn:hover {
+      background: #cf3f33;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      h1 { font-size: 2.5rem; }
+      .course h2 { font-size: 1.8rem; }
+      .course p { font-size: 1rem; }
+      .buttons button { font-size: 1rem; padding: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-sparkle"></div>
+  <div class="menu-container">
+    <h1>Your Own Unique Menu</h1>
+    
+    <!-- Notice Section -->
+    <div class="notice">
+      <p>Please send your personalised menu to our main chef at: <a href="mailto:izakradoslaw@gmail.com">izakradoslaw@gmail.com</a> before 12th of February.</p>
+      <button id="proceed">Proceed</button>
+    </div>
+    
+    <!-- Menu List: Course selections will be inserted here -->
+    <div id="menu-list"></div>
+    
+    <!-- Button Group -->
+    <div class="buttons">
+      <button id="download-menu">Download Menu</button>
+      <button id="print-menu">Print Menu</button>
+      <button class="restart-btn" id="start-again">Start Again</button>
+    </div>
+  </div>
+  
+  <script>
+    /***** Build the Menu from Stored Course Selections *****/
+    const courses = ['course1', 'course2', 'course3', 'course4', 'course5'];
+    const courseTitles = {
+      'course1': 'Course 1: Amuse-Bouche',
+      'course2': 'Course 2: Starter/Appetizer',
+      'course3': 'Course 3: Main Course',
+      'course4': 'Course 4: Palate Cleanser / Pre-Dessert',
+      'course5': 'Course 5: Dessert'
+    };
+    
+    const menuList = document.getElementById('menu-list');
+    let menuHTML = "";
+    
+    courses.forEach(course => {
+      const data = localStorage.getItem(course);
+      if (data) {
+        const courseData = JSON.parse(data);
+        // Use description from either "description" or "desc"
+        const descriptionText = courseData.description || courseData.desc || "";
+        const titleHTML = courseData.title ? `<p><strong>${courseData.title}</strong></p>` : "";
+        const descriptionHTML = descriptionText ? `<p>${descriptionText}</p>` : "";
+        const linkHTML = (courseData.link && courseData.link !== "#" && courseData.link.trim() !== "")
+                           ? `<p><a href="${courseData.link}" target="_blank">${courseData.link}</a></p>`
+                           : "";
+        menuHTML += `<div class="course">
+          <h2>${courseTitles[course]}</h2>
+          ${titleHTML}
+          ${descriptionHTML}
+          ${linkHTML}
+        </div>`;
+      }
+    });
+    menuList.innerHTML = menuHTML;
+    
+    /***** Button Functionalities *****/
+    // Download Menu: Create an HTML file for download
+    document.getElementById('download-menu').addEventListener('click', function() {
+      let menuContent = "<html><head><meta charset='UTF-8'><title>Your Menu</title></head><body style='background:#000; color:#fff;'>";
+      courses.forEach(course => {
+        const data = localStorage.getItem(course);
+        if (data) {
+          const courseData = JSON.parse(data);
+          const descriptionText = courseData.description || courseData.desc || "";
+          const titleHTML = courseData.title ? `<p><strong>${courseData.title}</strong></p>` : "";
+          const descriptionHTML = descriptionText ? `<p>${descriptionText}</p>` : "";
+          const linkHTML = (courseData.link && courseData.link !== "#" && courseData.link.trim() !== "")
+                           ? `<p><a href="${courseData.link}" target="_blank" style="color:#D4AF37;">${courseData.link}</a></p>`
+                           : "";
+          menuContent += `<h2 style="color:#D4AF37;">${courseTitles[course]}</h2>`;
+          menuContent += titleHTML;
+          menuContent += descriptionHTML;
+          menuContent += linkHTML;
+          menuContent += `<br>`;
+        }
+      });
+      menuContent += "</body></html>";
+      
+      const blob = new Blob([menuContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'menu.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+    
+    // Print Menu: Open the print dialog
+    document.getElementById('print-menu').addEventListener('click', function() {
+      window.print();
+    });
+    
+    // Restart: Clear course selections and redirect to the beginning of course picking (courses.html)
+    document.getElementById('start-again').addEventListener('click', function() {
+      if (confirm("Are you sure you want to restart? This will clear your current menu choices.")) {
+        ['course1', 'course2', 'course3', 'course4', 'course5'].forEach(key => localStorage.removeItem(key));
+        window.location.href = "courses.html";
+      }
+    });
+    
+    // Proceed: Navigate to final page (final.html)
+    document.getElementById('proceed').addEventListener('click', function() {
+      window.location.href = "final.html";
+    });
+  </script>
+</body>
+</html>

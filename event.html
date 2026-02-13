@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      /* Use our own hand‑crafted starry night backdrop */
+      background: url('images/starry_bg_custom.png') center/cover fixed;
+      color: #D4AF37;
+      position: relative;
+      overflow: hidden;
+    }
+
+    :root {
+      /* Accent colour for decorative hearts */
+      --accent: #e91e63;
+    }
+
+    /* Dark overlay to improve readability on starry background */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+      pointer-events: none;
+    }
+    audio { display: none; }
+    .container {
+      background: rgba(0,0,0,0.92);
+      border: 1px solid #D4AF37;
+      border-radius: 14px;
+      padding: 2.5rem 3rem;
+      max-width: 950px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.6);
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    /* Additional note styling */
+    .note {
+      font-size: 1rem;
+      margin-top: 1rem;
+      font-style: italic;
+      color: #bca45a;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Decorative underline beneath the main heading */
+    h1::after {
+      content: '';
+      display: block;
+      width: 160px;
+      height: 2px;
+      margin: 0.4rem auto 0;
+      background: linear-gradient(to right, transparent, #D4AF37, transparent);
+    }
+
+    h2.tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: normal;
+      margin-bottom: 1.5rem;
+      color: #bca45a;
+    }
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.6rem;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+    .detail-row .icon {
+      font-size: 1.4rem;
+      line-height: 1;
+      color: #D4AF37;
+    }
+    .map-container {
+      margin: 1.5rem 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(212,175,55,0.6);
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 350px;
+      border: 0;
+    }
+    /* Timeline styling */
+    .timeline {
+      margin: 2rem 0 1rem;
+      text-align: left;
+      position: relative;
+      padding-left: 2rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #D4AF37;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.2rem;
+      padding-left: 1.5rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -11px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      background: #D4AF37;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(212,175,55,0.8);
+    }
+    .timeline-time {
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+    .timeline-desc {
+      color: #cbb46a;
+      font-size: 1.05rem;
+    }
+    .next-btn {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      background: #D4AF37;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .next-btn:hover {
+      background: #b4942a;
+      transform: scale(1.05);
+    }
+
+    /* Floating hearts for a romantic overlay */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      transform: rotate(45deg);
+      opacity: 0.4;
+      animation: floatHeart 14s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after  { top: 0; left: -10px; }
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    }
+
+    /* Highlights section styling */
+    .highlights {
+      text-align: left;
+      margin: 1.5rem 0 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid #D4AF37;
+    }
+    .highlights h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+      color: #D4AF37;
+    }
+    .highlights ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: #cbb46a;
+    }
+    .highlights li {
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .highlights li .icon {
+      font-size: 1.3rem;
+      color: #D4AF37;
+    }
+
+    /* Intro paragraph after tagline */
+    .intro {
+      font-size: 1.1rem;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      color: #cbb46a;
+      text-align: center;
+    }
+
+    /* Sparkle (star) styling */
+    .decor-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #D4AF37;
+      box-shadow: 0 0 6px 2px rgba(212,175,55,0.7);
+      opacity: 0.8;
+      border-radius: 50%;
+      animation: floatSparkle 12s linear infinite;
+    }
+    @keyframes floatSparkle {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating sparkles for subtle animation -->
+  <div class="decor-container" id="decor"></div>
+  <audio id="bg-music" autoplay loop>
+    <source src="music/event.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="container">
+    <h1>Save the Date</h1>
+    <h2 class="tagline">An evening of surprises awaits you</h2>
+    <p class="intro">Join for a night to remember; (hopefully) exquisite flavours, never-stopping wine and cheerful moments under the stars (of my apartment lol).</p>
+    <div class="detail-row"><span class="icon">📅</span><span>14&nbsp;February&nbsp;2026</span></div>
+    <div class="detail-row"><span class="icon">⏰</span><span>19:00&nbsp;(7:00&nbsp;PM)</span></div>
+    <div class="detail-row"><span class="icon">🏢</span><span>Apartment&nbsp;196</span></div>
+    <div class="detail-row"><span class="icon">🎩</span><span>Formal&nbsp;dress</span></div>
+    <div class="detail-row"><span class="icon">📍</span><span>Sokratesa&nbsp;13C, 01‑909&nbsp;Warsaw, Poland</span></div>
+    <p class="note">Please bring your invitation ticket and arrive on time.</p>
+    <p class="note">Cannot celebrate without you!</p>
+    <!-- Schedule timeline for the evening -->
+    <div class="timeline">
+      <div class="timeline-item"><span class="timeline-time">19:00</span><span class="timeline-desc">Arrival &amp; welcome drinks</span></div>
+      <div class="timeline-item"><span class="timeline-time">19:15-19:45</span><span class="timeline-desc">Amuse‑bouche &amp; starter</span></div>
+      <div class="timeline-item"><span class="timeline-time">19:45-20:30</span><span class="timeline-desc">Main course with wine pairing</span></div>
+      <div class="timeline-item"><span class="timeline-time">21:00</span><span class="timeline-desc">!Surprise! dessert</span></div>
+      <div class="timeline-item"><span class="timeline-time">Onward</span><span class="timeline-desc">Who knows?</span></div>
+    </div>
+
+    <!-- Evening highlights section to set the mood -->
+    <div class="highlights">
+      <h3>Evening Schedule</h3>
+      <ul>
+        <li><span class="icon">🕯️</span><span> Candle‑lit ambience and vinyl melodies</span></li>
+        <li><span class="icon">🍽️</span><span> A culinary journey from amuse‑bouche to dessert</span></li>
+        <li><span class="icon">🥂</span><span> A toast to celebrate this very special day</span></li>
+        <li><span class="icon">🎁</span><span> A surprise sweet treat to end the night on a high note?</span></li>
+      </ul>
+    </div>
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.142772726075!2d21.015847316020603!3d52.24529027975937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471eccdd23e0fddd%3A0x26e11a3f7c80b8ed!2sSokratesa%2013C%2C%2001-909%20Warsaw%2C%20Poland!5e0!3m2!1sen!2sus!4v1614972735432!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    <button class="next-btn" onclick="goToMenu()">See the Menu</button>
+  </div>
+  <script>
+    function goToMenu() {
+      window.location.href = 'menu.html';
+    }
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.4;
+    // Unmute music on first user interaction
+    document.body.addEventListener('click', function() {
+      if(bgMusic.paused) bgMusic.play();
+      bgMusic.muted = false;
+    }, { once: true });
+
+    // Generate floating sparkles for a dreamy effect
+    const decorContainer = document.getElementById('decor');
+    const sparkleCount = 35;
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.left = Math.random() * 100 + '%';
+      const duration = 10 + Math.random() * 8;
+      sparkle.style.animationDuration = duration + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
+      // Randomize size to add variety
+      const size = 4 + Math.random() * 6;
+      sparkle.style.width = size + 'px';
+      sparkle.style.height = size + 'px';
+      decorContainer.appendChild(sparkle);
+    }
+
+    // Also generate floating hearts to enhance the romantic vibe
+    const heartCount = 24;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.left = Math.random() * 100 + '%';
+      const durationH = 12 + Math.random() * 6;
+      heart.style.animationDuration = durationH + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      // Randomize size to vary hearts
+      const sizeH = 12 + Math.random() * 16;
+      heart.style.width = sizeH + 'px';
+      heart.style.height = sizeH + 'px';
+      decorContainer.appendChild(heart);
+    }
+  </script>
+</body>
+</html>

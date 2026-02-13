@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --accent: #e91e63;
+      --bg-dark: #0a0a0a;
+      --card-bg: rgba(255,255,255,0.95);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Use our custom hand‑crafted starry backdrop */
+      background: url('images/starry_bg_custom.png') center/cover fixed;
+      color: var(--gold);
+      padding: 20px;
+      position: relative;
+      /* Allow vertical scrolling to reveal all menu content while hiding horizontal overflow */
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* Dark overlay to improve readability on starry background */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+      pointer-events: none;
+    }
+    audio { display: none; }
+    .container {
+      background: rgba(0, 0, 0, 0.82);
+      border: 1px solid var(--gold);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.6);
+      padding: 2.5rem 3rem;
+      max-width: 950px;
+      width: 100%;
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      z-index: 1;
+      /* Blur the backdrop to soften the starry background */
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    p.intro {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #cbb46a;
+      text-align: center;
+    }
+    .menu-item {
+      position: relative;
+      background: var(--card-bg);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.6rem 1.8rem 1.6rem 1.6rem;
+      border-radius: 10px;
+      margin: 1.2rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      color: #333;
+      overflow: hidden;
+    }
+    /* Stylised heart icon for each course */
+    .menu-item .icon-heart {
+      width: 36px;
+      height: 36px;
+      position: relative;
+      margin-top: 4px;
+    }
+    .menu-item .icon-heart span {
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 2px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .menu-item .icon-heart span::before,
+    .menu-item .icon-heart span::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .menu-item .icon-heart span::before { top: -10px; left: 0; }
+    .menu-item .icon-heart span::after  { top: 0; left: -10px; }
+    .menu-item h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    .menu-item p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #444;
+    }
+    .info-section {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      color: #333;
+    }
+    .info-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.6rem;
+      color: var(--accent);
+    }
+    .info-section p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #444;
+    }
+    .next-btn {
+      margin-top: 2rem;
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      background: var(--gold);
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .next-btn:hover {
+      background: #b4942a;
+      transform: scale(1.05);
+    }
+
+    /* Floating hearts overlay */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      transform: rotate(45deg);
+      opacity: 0.4;
+      animation: floatHeart 14s linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--accent);
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after  { top: 0; left: -10px; }
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    }
+
+    /* Floating star sparkles for atmospheric animation */
+    .decor-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: var(--gold);
+      box-shadow: 0 0 6px 2px rgba(212,175,55,0.7);
+      opacity: 0.8;
+      border-radius: 50%;
+      animation: floatSparkle 14s linear infinite;
+    }
+    @keyframes floatSparkle {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating sparkles container for subtle animation -->
+  <div class="decor-container" id="decor"></div>
+  <audio id="bg-music" autoplay loop>
+    <source src="music/menu.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="container">
+    <h1>Tasting Menu</h1>
+    <p class="intro">A trio of dishes to try: from zesty olives and crunchy bruschetta to a creamy risotto of wild mushrooms.</p>
+    <!-- Menu items -->
+    <div class="menu-item">
+      <div class="icon-heart"><span></span></div>
+      <div>
+        <h2>Amuse‑bouche: Citrus Mint Olives</h2>
+        <p>Black olives marinated in zesty lemon and orange, fresh mint leaves and a hint of cracked pepper.</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div class="icon-heart"><span></span></div>
+      <div>
+        <h2>Starter: Bruschetta</h2>
+        <p>Crunchy slices of baguette brushed with garlic and olive oil, topped with melted mozzarella and/or burrata, ripe tomato and onion, finished with basil and chives.</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div class="icon-heart"><span></span></div>
+      <div>
+        <h2>Main Course: Wild Mushroom Risotto</h2>
+        <p>Creamy arborio rice simmered with wild mushrooms, parmesan and a splash of cream and lemon, finished with fresh parsley.</p>
+      </div>
+    </div>
+
+    <!-- Pairings & Dessert info section -->
+    <div class="info-section">
+      <h3>Wine Pairing</h3>
+      <p>Crisp dry white with citrus and mineral notes to complement the creamy risotto, and a light cherry‑forward red with earthy undertones to pair with the wild mushrooms.</p>
+      <h3>Dessert</h3>
+      <p>For the grand finale, the dessert is a surprise — our honoured guest will bring a sweet treat to share!!!</p>
+    </div>
+    <!-- Navigation and music controls -->
+    <button class="next-btn" onclick="goToTicket()">See the Ticket</button>
+  </div>
+  <script>
+    function goToTicket() {
+      window.location.href = 'ticket.html';
+    }
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.4;
+    // Unmute music on first user interaction
+    document.body.addEventListener('click', function() {
+      if(bgMusic.paused) bgMusic.play();
+      bgMusic.muted = false;
+    }, { once: true });
+
+    // Generate floating star sparkles for the menu page
+    const decorContainer = document.getElementById('decor');
+    const sparkleCount = 30;
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.left = Math.random() * 100 + '%';
+      const duration = 10 + Math.random() * 8;
+      sparkle.style.animationDuration = duration + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
+      const size = 4 + Math.random() * 6;
+      sparkle.style.width = size + 'px';
+      sparkle.style.height = size + 'px';
+      decorContainer.appendChild(sparkle);
+    }
+
+    // Also generate floating hearts for additional romance
+    const heartCount = 24;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.left = Math.random() * 100 + '%';
+      const durationH = 12 + Math.random() * 6;
+      heart.style.animationDuration = durationH + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      const sizeH = 12 + Math.random() * 16;
+      heart.style.width = sizeH + 'px';
+      heart.style.height = sizeH + 'px';
+      decorContainer.appendChild(heart);
+    }
+  </script>
+</body>
+</html>

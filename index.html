@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Valentine's Invitation – Login</title>
+  <style>
+    :root {
+      --primary-color: #0f0;       /* Neon green */
+      --secondary-color: #0ff;     /* Neon cyan */
+      --bg-dark: #121212;
+      --bg-darker: #1a1a1a;
+      --container-bg: rgba(20, 20, 20, 0.95);
+    }
+    /* Reset & global styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+    /* Matrix effect canvas  */
+    #matrix {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    /* Container for floating random numbers */
+    #number-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .number {
+      position: absolute;
+      font-size: 1.5rem;
+      color: rgba(0,255,255,0.3);
+      animation: floatNumber 8s ease-in-out infinite;
+    }
+    @keyframes floatNumber {
+      0%   { transform: translateY(0) scale(1); opacity: 0.5; }
+      50%  { transform: translateY(-20px) scale(1.2); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 0.5; }
+    }
+    /* Hide audio element controls */
+    audio {
+      display: none;
+    }
+    .container {
+      background: var(--container-bg);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary-color);
+      text-shadow: 0 0 5px var(--secondary-color);
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1.2rem;
+      border: 2px solid var(--primary-color);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--primary-color);
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .input-group input:focus {
+      border-color: var(--secondary-color);
+    }
+    button.submit-btn {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--primary-color);
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    button.submit-btn:hover {
+      background-color: var(--secondary-color);
+      transform: scale(1.05);
+    }
+    /* Shake animation for error feedback */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
+    }
+    .error {
+      animation: shake 0.4s;
+    }
+    .error-message {
+      color: #ff6060;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      min-height: 1.2rem;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1.5rem; }
+      h1 { font-size: 1.8rem; }
+      .input-group input { font-size: 1rem; }
+      button.submit-btn { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background music for login page -->
+  <audio id="bg-music" autoplay loop>
+    <source src="music/login.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <!-- Matrix effect canvas -->
+  <canvas id="matrix"></canvas>
+  <!-- Container for floating random numbers -->
+  <div id="number-container"></div>
+  <div class="container" id="login-container">
+    <h1>Enter Your Details</h1>
+    <div class="input-group">
+      <input type="text" id="first-name" placeholder="Name" autocomplete="off" autofocus>
+    </div>
+    <div class="input-group">
+      <input type="text" id="last-name" placeholder="Surname" autocomplete="off">
+    </div>
+    <button class="submit-btn" onclick="checkCredentials()">Submit</button>
+    <div class="error-message" id="error-message"></div>
+  </div>
+  <script>
+    // Case-insensitive comparison for credentials
+    const expectedName = 'martyna';
+    const expectedSurname = 'groszewska';
+    function checkCredentials() {
+      const firstName = document.getElementById('first-name').value.trim().toLowerCase();
+      const lastName = document.getElementById('last-name').value.trim().toLowerCase();
+      const errorElem = document.getElementById('error-message');
+      if(firstName === expectedName && lastName === expectedSurname) {
+        // Successful login
+        window.location.href = 'pigeon.html';
+      } else {
+        // Shake container and show error
+        document.getElementById('login-container').classList.add('error');
+        errorElem.textContent = 'Incorrect details. Please try again.';
+        setTimeout(() => {
+          document.getElementById('login-container').classList.remove('error');
+        }, 400);
+      }
+    }
+    // Submit on Enter key in surname input
+    document.getElementById('last-name').addEventListener('keyup', function(event) {
+      if(event.key === 'Enter') {
+        checkCredentials();
+      }
+    });
+    // Generate random floating numbers in the background
+    const numberContainer = document.getElementById('number-container');
+    const numberCount = 30;
+    for (let i = 0; i < numberCount; i++) {
+      const numberElem = document.createElement('div');
+      numberElem.classList.add('number');
+      numberElem.textContent = Math.floor(Math.random() * 10000);
+      numberElem.style.top = Math.random() * 100 + '%';
+      numberElem.style.left = Math.random() * 100 + '%';
+      numberElem.style.animationDuration = (6 + Math.random() * 4) + 's';
+      numberElem.style.animationDelay = Math.random() * 5 + 's';
+      numberContainer.appendChild(numberElem);
+    }
+    // Matrix effect (digital rain)
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()-+=<>?".split("");
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0f0';
+      ctx.font = fontSize + 'px monospace';
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 33);
+    // Music autoplay: unmute on first interaction
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.3;
+    document.body.addEventListener('click', function() {
+      if(bgMusic.paused) {
+        bgMusic.play();
+      }
+      if(bgMusic.muted) {
+        bgMusic.muted = false;
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
